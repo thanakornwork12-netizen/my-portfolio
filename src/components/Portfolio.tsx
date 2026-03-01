@@ -1,6 +1,6 @@
 "use client"
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion"
-import { useEffect, useRef, useState, useCallback, type ReactNode } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 
 /* ─────────────────────────────────────────────────────────────────────────────
    PORTFOLIO — B&W Editorial + Color Accents
