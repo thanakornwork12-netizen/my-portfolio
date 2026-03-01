@@ -408,7 +408,6 @@ function Counter({ to, label, color }: { to: number; label: string; color: strin
 
   useEffect(() => {
     if (!inView) return
-    let start = 0
     const duration = 1400
     const startTime = performance.now()
     const tick = (now: number) => {
