@@ -35,7 +35,6 @@ function FontLoader() {
       ::-webkit-scrollbar { width: 3px; }
       ::-webkit-scrollbar-thumb { background: var(--amber); }
 
-      /* Grain texture */
       body::before {
         content: '';
         position: fixed;
@@ -63,34 +62,69 @@ function FontLoader() {
         .mosaic-stack { grid-template-rows: auto auto !important; }
         .proj-card-inner { grid-template-columns: 1fr !important; }
         .hero-num { font-size: clamp(100px, 30vw, 200px) !important; }
+
+        /* Mobile project card specific */
+        .proj-img-block { width: 100% !important; height: 220px !important; }
+        .proj-img-block img { height: 220px !important; object-fit: cover !important; }
+        .proj-tap-hint { display: flex !important; }
+        .proj-desktop-hint { display: none !important; }
+        .proj-card-tap-bar { display: flex !important; }
       }
+
+      @media (min-width: 769px) {
+        .proj-tap-hint { display: none !important; }
+        .proj-card-tap-bar { display: none !important; }
+        .proj-desktop-hint { display: flex !important; }
+      }
+
       @media (min-width: 769px) and (max-width: 1024px) {
         .section-pad { padding: 80px 32px !important; }
         .hero-pad { padding: 0 32px 70px !important; }
       }
 
-      /* Marquee */
       @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
       .marquee-track { animation: marquee 18s linear infinite; display: flex; white-space: nowrap; }
 
-      /* Cursor blink */
       @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-      /* Hide default cursor */
       * { cursor: none !important; }
+      @media (max-width: 768px) { * { cursor: auto !important; } }
 
-      /* Diagonal divider clip */
       .clip-skew-down  { clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%); margin-bottom: -6vw; }
       .clip-skew-up    { clip-path: polygon(0 6vw, 100% 0, 100% 100%, 0 100%); padding-top: 6vw; }
       .clip-skew-both  { clip-path: polygon(0 4vw, 100% 0, 100% calc(100% - 4vw), 0 100%); padding: 6vw 0; margin-bottom: -4vw; }
 
-      /* Stagger letter animation */
       @keyframes letterIn {
         from { opacity: 0; transform: translateY(80%) skewY(8deg); }
         to   { opacity: 1; transform: translateY(0) skewY(0deg); }
       }
       .letter-wrap { overflow: hidden; display: inline-block; }
       .letter-char { display: inline-block; animation: letterIn 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+
+      /* Tap ripple */
+      @keyframes tapRipple {
+        0%   { transform: translate(-50%,-50%) scale(0); opacity: 0.4; }
+        100% { transform: translate(-50%,-50%) scale(4); opacity: 0; }
+      }
+      .tap-ripple {
+        position: absolute;
+        width: 80px; height: 80px;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: tapRipple 0.6s ease-out forwards;
+      }
+
+      /* Pulse animation for tap cue */
+      @keyframes tapPulse {
+        0%,100% { transform: scale(1); opacity: 0.8; }
+        50%      { transform: scale(1.12); opacity: 1; }
+      }
+
+      /* Swipe up hint arrow */
+      @keyframes arrowBounce {
+        0%,100% { transform: translateY(0); }
+        50%      { transform: translateY(-4px); }
+      }
     `}</style>
   )
 }
@@ -141,20 +175,16 @@ const PROJECTS = [
   },
 ]
 
-// tier: "strong" | "good" | "learning"
 const HARD_SKILLS = [
-  // Strong — used in real shipped projects
   { label: "Flutter & Dart",       tier: "strong",   accent: "var(--sky)",     proof: "DadBuddy App" },
   { label: "Firebase",             tier: "strong",   accent: "var(--amber)",   proof: "DadBuddy — Cloud Logging" },
   { label: "Hive (Local Storage)", tier: "strong",   accent: "var(--orange)",  proof: "DadBuddy — Offline Data" },
   { label: "React / Next.js",      tier: "strong",   accent: "var(--rose)",    proof: "Photography Portfolio" },
   { label: "Python",               tier: "strong",   accent: "var(--emerald)", proof: "Programming Competition" },
   { label: "UI/UX Design (Figma)", tier: "strong",   accent: "var(--violet)",  proof: "DadBuddy · UBU Green" },
-  // Good — used but not production-shipped solo
   { label: "TypeScript",           tier: "good",     accent: "var(--sky)",     proof: "Portfolio Projects" },
   { label: "Node.js / Express",    tier: "good",     accent: "var(--emerald)", proof: "UBU Green Backend" },
   { label: "Tailwind CSS",         tier: "good",     accent: "var(--pink)",    proof: "UBU Green · Web Projects" },
-
 ]
 
 const SOFT_SKILLS = [
@@ -168,7 +198,6 @@ const SOFT_SKILLS = [
   { label: "Self-Directed Learning",  tier: "good",     accent: "var(--orange)",  proof: "Flutter เรียนเอง → Shipped App" },
 ]
 
-// Tools grouped by project
 const TOOL_GROUPS = [
   {
     project: "DadBuddy App",
@@ -180,11 +209,8 @@ const TOOL_GROUPS = [
     accent: "var(--lime)",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Prisma"],
   },
-
-
 ]
 
-/* ─── Shared ── */
 function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-50px" })
@@ -205,7 +231,6 @@ function Mono({ children, style = {} }: { children: ReactNode; style?: React.CSS
   )
 }
 
-/* ─── SECTION CONFIG for cursor & side-nav ── */
 const SECTIONS = [
   { id: "hero",       label: "Home",       color: "var(--amber)" },
   { id: "activities", label: "Activities", color: "var(--amber)" },
@@ -214,7 +239,6 @@ const SECTIONS = [
   { id: "contact",    label: "Contact",    color: "var(--emerald)" },
 ]
 
-/* ─── LOADING SCREEN ── */
 function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0)
   const [phase, setPhase] = useState<"counting" | "done">("counting")
@@ -246,14 +270,11 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
           onAnimationComplete={() => { if (phase === "done") onDone() }}
           style={{ position: "fixed", inset: 0, zIndex: 9000, background: "var(--black)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32, pointerEvents: phase === "done" ? "none" : "all" }}
         >
-          {/* Monogram */}
           <motion.div
             initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(60px,15vw,120px)", fontWeight: 900, fontStyle: "italic", color: "var(--white)", letterSpacing: "-0.05em", lineHeight: 1 }}
           >TT.</motion.div>
-
-          {/* Progress bar */}
           <div style={{ width: "min(320px, 60vw)" }}>
             <div style={{ height: 2, background: "#1e1e1e", overflow: "hidden", marginBottom: 12 }}>
               <motion.div
@@ -267,8 +288,6 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
               <span style={{ fontFamily: "var(--ff-impact)", fontSize: 16, color: "var(--amber)", letterSpacing: "0.05em" }}>{Math.round(progress)}%</span>
             </div>
           </div>
-
-          {/* Floating labels */}
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
             {["Flutter", "React", "Figma", "Python", "Firebase"].map((t, i) => (
               <motion.span key={t}
@@ -284,7 +303,6 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
   )
 }
 
-/* ─── CUSTOM CURSOR ── */
 function CustomCursor() {
   const [pos, setPos] = useState({ x: -100, y: -100 })
   const [trail, setTrail] = useState({ x: -100, y: -100 })
@@ -296,13 +314,11 @@ function CustomCursor() {
   useEffect(() => {
     const move = (e: MouseEvent) => {
       setPos({ x: e.clientX, y: e.clientY })
-      // Detect section for color
       const el = document.elementFromPoint(e.clientX, e.clientY)
       const section = el?.closest("section")
       const id = section?.id ?? "hero"
       const found = SECTIONS.find(s => s.id === id)
       if (found) setSectionColor(found.color)
-      // Detect hoverable
       const target = el as HTMLElement
       setHovering(!!(target?.closest("a") || target?.closest("button") || target?.closest("[data-hover]")))
     }
@@ -314,7 +330,6 @@ function CustomCursor() {
     return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); window.removeEventListener("mouseup", up) }
   }, [])
 
-  // Smooth trail
   useEffect(() => {
     let raf: number
     const animate = () => {
@@ -331,23 +346,18 @@ function CustomCursor() {
 
   return (
     <>
-      {/* Outer ring — trailing */}
       <div style={{
         position: "fixed", left: trail.x, top: trail.y, zIndex: 8999, pointerEvents: "none",
         width: hovering ? 48 : clicking ? 20 : 36, height: hovering ? 48 : clicking ? 20 : 36,
-        border: `1.5px solid ${sectionColor}`,
-        borderRadius: "50%",
+        border: `1.5px solid ${sectionColor}`, borderRadius: "50%",
         transform: "translate(-50%, -50%)",
         transition: "width 0.25s, height 0.25s, border-color 0.4s",
-        opacity: hovering ? 0.8 : 0.5,
-        mixBlendMode: "difference" as const,
+        opacity: hovering ? 0.8 : 0.5, mixBlendMode: "difference" as const,
       }} />
-      {/* Inner dot — exact */}
       <div style={{
         position: "fixed", left: pos.x, top: pos.y, zIndex: 9000, pointerEvents: "none",
         width: clicking ? 12 : 6, height: clicking ? 12 : 6,
-        background: sectionColor,
-        borderRadius: "50%",
+        background: sectionColor, borderRadius: "50%",
         transform: "translate(-50%, -50%)",
         transition: "width 0.1s, height 0.1s, background 0.4s",
       }} />
@@ -355,39 +365,25 @@ function CustomCursor() {
   )
 }
 
-/* ─── SIDE NAV DOTS ── */
 function SideNavDots() {
   const [active, setActive] = useState("hero")
-
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id) })
     }, { threshold: 0.4 })
-    SECTIONS.forEach(s => {
-      const el = document.getElementById(s.id)
-      if (el) obs.observe(el)
-    })
+    SECTIONS.forEach(s => { const el = document.getElementById(s.id); if (el) obs.observe(el) })
     return () => obs.disconnect()
   }, [])
-
   const activeSection = SECTIONS.find(s => s.id === active) ?? SECTIONS[0]
-
   return (
     <div className="hide-mobile" style={{ position: "fixed", right: 24, top: "50%", transform: "translateY(-50%)", zIndex: 150, display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
       {SECTIONS.map(s => {
         const isActive = s.id === active
         return (
-          <a key={s.id} href={`#${s.id}`} data-hover="1"
-            title={s.label}
-            style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
-          >
-            {/* Label appears on active */}
-            <motion.span
-              animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : 8 }}
-              transition={{ duration: 0.25 }}
+          <a key={s.id} href={`#${s.id}`} data-hover="1" title={s.label} style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
+            <motion.span animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : 8 }} transition={{ duration: 0.25 }}
               style={{ fontFamily: "var(--ff-mono)", fontSize: 8, letterSpacing: "0.25em", textTransform: "uppercase", color: activeSection.color, whiteSpace: "nowrap" }}
             >{s.label}</motion.span>
-            {/* Dot */}
             <motion.div
               animate={{ width: isActive ? 20 : 6, height: isActive ? 4 : 6, background: isActive ? activeSection.color : "#555", borderRadius: isActive ? 2 : "50%" }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -400,12 +396,10 @@ function SideNavDots() {
   )
 }
 
-/* ─── ANIMATED COUNTER ── */
 function Counter({ to, label, color }: { to: number; label: string; color: string }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-60px" })
   const [val, setVal] = useState(0)
-
   useEffect(() => {
     if (!inView) return
     const duration = 1400
@@ -413,14 +407,12 @@ function Counter({ to, label, color }: { to: number; label: string; color: strin
     const tick = (now: number) => {
       const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      // Ease out expo
       const eased = 1 - Math.pow(1 - progress, 4)
       setVal(Math.round(eased * to))
       if (progress < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
   }, [inView, to])
-
   return (
     <div ref={ref} style={{ textAlign: "center" }}>
       <div style={{ fontFamily: "var(--ff-impact)", fontSize: "clamp(48px,8vw,96px)", lineHeight: 1, color, letterSpacing: "-0.02em" }}>
@@ -431,7 +423,6 @@ function Counter({ to, label, color }: { to: number; label: string; color: strin
   )
 }
 
-/* ─── STAGGER TEXT ── */
 function StaggerText({ text, style = {}, charStyle = {} }: { text: string; style?: React.CSSProperties; charStyle?: React.CSSProperties }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-40px" })
@@ -439,27 +430,20 @@ function StaggerText({ text, style = {}, charStyle = {} }: { text: string; style
     <span ref={ref} style={{ display: "inline-block", ...style }}>
       {text.split("").map((char, i) => (
         <span key={i} className="letter-wrap">
-          <span
-            className="letter-char"
-            style={{
-              animationDelay: inView ? `${i * 0.035}s` : "9999s",
-              animationPlayState: inView ? "running" : "paused",
-              ...charStyle,
-            }}
-          >{char === " " ? "\u00A0" : char}</span>
+          <span className="letter-char" style={{ animationDelay: inView ? `${i * 0.035}s` : "9999s", animationPlayState: inView ? "running" : "paused", ...charStyle }}>
+            {char === " " ? "\u00A0" : char}
+          </span>
         </span>
       ))}
     </span>
   )
 }
 
-/* ─── SKEW DIVIDER ── */
 function SkewDivider({ fromColor, toColor, direction = "down" }: { fromColor: string; toColor: string; direction?: "down" | "up" }) {
   return (
     <div style={{ position: "relative", height: "6vw", minHeight: 48, overflow: "hidden", flexShrink: 0, zIndex: 1 }}>
       <div style={{ position: "absolute", inset: 0, background: fromColor }} />
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none"
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
         {direction === "down"
           ? <polygon points="0,0 1440,0 1440,80 0,20" fill={toColor} />
           : <polygon points="0,20 1440,0 1440,80 0,80" fill={toColor} />
@@ -469,7 +453,6 @@ function SkewDivider({ fromColor, toColor, direction = "down" }: { fromColor: st
   )
 }
 
-/* ─── Marquee ticker ── */
 function Marquee({ items, bg, color }: { items: string[]; bg: string; color: string }) {
   const doubled = [...items, ...items]
   return (
@@ -477,8 +460,7 @@ function Marquee({ items, bg, color }: { items: string[]; bg: string; color: str
       <div className="marquee-track" style={{ display: "flex", gap: 0 }}>
         {doubled.map((item, i) => (
           <span key={i} style={{ fontFamily: "var(--ff-impact)", fontSize: 18, letterSpacing: "0.08em", color, padding: "0 24px", display: "flex", alignItems: "center", gap: 24 }}>
-            {item}
-            <span style={{ color: `${color}40`, fontSize: 10 }}>◆</span>
+            {item}<span style={{ color: `${color}40`, fontSize: 10 }}>◆</span>
           </span>
         ))}
       </div>
@@ -486,7 +468,6 @@ function Marquee({ items, bg, color }: { items: string[]; bg: string; color: str
   )
 }
 
-/* ─── Section label strip ── */
 function SectionLabel({ number, label, color = "var(--mid)" }: { number: string; label: string; color?: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 40 }}>
@@ -497,7 +478,6 @@ function SectionLabel({ number, label, color = "var(--mid)" }: { number: string;
   )
 }
 
-/* ─── PROJECT MODAL ── */
 type Project = typeof PROJECTS[0]
 
 function ProjectModal({ project, onClose }: { project: Project | null; onClose: () => void }) {
@@ -545,10 +525,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
             className="project-modal"
             style={{ position: "fixed", top: 0, right: 0, bottom: 0, width: "min(680px,100vw)", background: "#080806", zIndex: 201, overflowY: "auto", display: "flex", flexDirection: "column", borderLeft: `3px solid ${project.accent}` }}
           >
-            {/* Accent top strip */}
             <div style={{ height: 4, background: project.accent, flexShrink: 0 }} />
-
-            {/* Header */}
             <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#080806", borderBottom: "1px solid #1a1a1a", padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <span style={{ fontFamily: "var(--ff-impact)", fontSize: 28, color: project.accent, lineHeight: 1 }}>{project.no}</span>
@@ -561,8 +538,6 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#888" }}
               >×</button>
             </div>
-
-            {/* Main image */}
             {totalImgs > 0 && (
               <div style={{ position: "relative", background: "#060606", flexShrink: 0 }}>
                 <AnimatePresence mode="wait">
@@ -574,11 +549,9 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                 {totalImgs > 1 && (
                   <>
                     <button onClick={() => setImgIdx(i => Math.max(i - 1, 0))} disabled={imgIdx === 0}
-                      style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, border: `1px solid ${project.accent}44`, background: "rgba(0,0,0,0.8)", color: project.accent, cursor: imgIdx === 0 ? "default" : "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center", opacity: imgIdx === 0 ? 0.25 : 1, fontFamily: "var(--ff-impact)" }}
-                    >‹</button>
+                      style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, border: `1px solid ${project.accent}44`, background: "rgba(0,0,0,0.8)", color: project.accent, cursor: imgIdx === 0 ? "default" : "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center", opacity: imgIdx === 0 ? 0.25 : 1, fontFamily: "var(--ff-impact)" }}>‹</button>
                     <button onClick={() => setImgIdx(i => Math.min(i + 1, totalImgs - 1))} disabled={imgIdx === totalImgs - 1}
-                      style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, border: `1px solid ${project.accent}44`, background: "rgba(0,0,0,0.8)", color: project.accent, cursor: imgIdx === totalImgs - 1 ? "default" : "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center", opacity: imgIdx === totalImgs - 1 ? 0.25 : 1, fontFamily: "var(--ff-impact)" }}
-                    >›</button>
+                      style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 40, height: 40, border: `1px solid ${project.accent}44`, background: "rgba(0,0,0,0.8)", color: project.accent, cursor: imgIdx === totalImgs - 1 ? "default" : "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center", opacity: imgIdx === totalImgs - 1 ? 0.25 : 1, fontFamily: "var(--ff-impact)" }}>›</button>
                     <div style={{ position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)", background: "rgba(0,0,0,0.85)", border: `1px solid ${project.accent}33`, padding: "3px 14px" }}>
                       <Mono style={{ color: project.accent, fontSize: 9 }}>{imgIdx + 1} / {totalImgs}</Mono>
                     </div>
@@ -586,31 +559,23 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                 )}
               </div>
             )}
-
-            {/* Thumbnail strip */}
             {totalImgs > 1 && (
               <div style={{ display: "flex", gap: 3, background: "#050505", padding: "8px 8px 10px", overflowX: "auto", flexShrink: 0 }}>
                 {project.images.map((src, i) => (
                   <button key={i} onClick={() => setImgIdx(i)}
-                    style={{ flexShrink: 0, width: 72, height: 52, padding: 0, background: "none", cursor: "pointer", border: i === imgIdx ? `2px solid ${project.accent}` : "2px solid #1e1e1e", overflow: "hidden", transition: "border-color .15s" }}
-                  >
+                    style={{ flexShrink: 0, width: 72, height: 52, padding: 0, background: "none", cursor: "pointer", border: i === imgIdx ? `2px solid ${project.accent}` : "2px solid #1e1e1e", overflow: "hidden", transition: "border-color .15s" }}>
                     <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </button>
                 ))}
               </div>
             )}
-
             {totalImgs === 0 && (
               <div style={{ width: "100%", padding: "60px 0", background: project.imageBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <p style={{ fontFamily: "var(--ff-impact)", fontSize: "clamp(80px,15vw,140px)", color: project.accent, opacity: 0.12, userSelect: "none", letterSpacing: "0.05em" }}>{project.no}</p>
               </div>
             )}
-
-            {/* Body */}
             <div style={{ padding: "clamp(20px,4vw,36px)", flex: 1 }}>
-              <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(22px,4vw,30px)", fontWeight: 900, letterSpacing: "-0.025em", fontStyle: "italic", color: "#fff", lineHeight: 1.15, marginBottom: 16 }}>
-                {project.title}
-              </h2>
+              <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(22px,4vw,30px)", fontWeight: 900, letterSpacing: "-0.025em", fontStyle: "italic", color: "#fff", lineHeight: 1.15, marginBottom: 16 }}>{project.title}</h2>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 24 }}>
                 {project.tags.map(t => (
                   <span key={t} style={{ fontFamily: "var(--ff-mono)", fontSize: 9, letterSpacing: "0.22em", textTransform: "uppercase", border: `1px solid ${project.accent}60`, color: project.accent, padding: "3px 9px", background: `${project.accent}10` }}>{t}</span>
@@ -644,24 +609,14 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
   )
 }
 
-/* ─── NAV ── */
 function Nav() {
   const { scrollY } = useScroll()
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => scrollY.on("change", v => setScrolled(v > 40)), [scrollY])
-
   return (
     <motion.nav className="nav-pad"
       initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.7 }}
-      style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "18px 48px",
-        borderBottom: scrolled ? "1px solid rgba(0,0,0,0.1)" : "1px solid transparent",
-        background: scrolled ? "rgba(245,244,239,.95)" : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        transition: "all .4s ease",
-      }}
+      style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 48px", borderBottom: scrolled ? "1px solid rgba(0,0,0,0.1)" : "1px solid transparent", background: scrolled ? "rgba(245,244,239,.95)" : "transparent", backdropFilter: scrolled ? "blur(16px)" : "none", transition: "all .4s ease" }}
     >
       <a href="#" style={{ fontFamily: "var(--ff-impact)", fontSize: 26, letterSpacing: "0.08em", color: "var(--black)" }}>TT.</a>
       <div className="hide-mobile" style={{ alignItems: "center", gap: 32 }}>
@@ -682,12 +637,10 @@ function Nav() {
   )
 }
 
-/* ─── HERO ── */
 function HeroSection() {
   const { scrollY } = useScroll()
   const yPx = useTransform(scrollY, [0, 700], [0, 100])
   const op  = useTransform(scrollY, [0, 500], [1, 0])
-
   const [tick, setTick] = useState(0)
   useEffect(() => { const t = setInterval(() => setTick(v => v + 1), 70); return () => clearInterval(t) }, [])
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%"
@@ -696,7 +649,6 @@ function HeroSection() {
   const NAME = "Thanakorn\nThongsa"
   const flat = NAME.replace("\n","")
   const rev = Math.min(tick * 0.35, flat.length)
-
   const [cursor, setCursor] = useState(true)
   useEffect(() => { const t = setInterval(() => setCursor(v => !v), 530); return () => clearInterval(t) }, [])
 
@@ -704,13 +656,9 @@ function HeroSection() {
     <section id="hero" className="hero-pad"
       style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "0 48px 80px", position: "relative", overflow: "hidden", background: "var(--bg)" }}
     >
-      {/* Big background number — watermark */}
-      <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 0.028 }} transition={{ delay: 0.5, duration: 1.5 }}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.028 }} transition={{ delay: 0.5, duration: 1.5 }}
         style={{ position: "absolute", top: "50%", right: "-5%", transform: "translateY(-50%)", fontFamily: "var(--ff-impact)", fontSize: "clamp(200px,35vw,420px)", color: "var(--black)", letterSpacing: "-0.05em", userSelect: "none", pointerEvents: "none", lineHeight: 1 }}
       >2025</motion.div>
-
-      {/* Animated color orbs */}
       <motion.div animate={{ x: [0, 20, 0], y: [0, -15, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         style={{ position: "absolute", top: "12%", right: "8%", width: "min(280px,40vw)", height: "min(280px,40vw)", borderRadius: "50%", background: "var(--amber)", opacity: 0.08, filter: "blur(80px)", pointerEvents: "none" }}
       />
@@ -720,14 +668,11 @@ function HeroSection() {
       <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 4 }}
         style={{ position: "absolute", top: "45%", left: "38%", width: "min(160px,25vw)", height: "min(160px,25vw)", borderRadius: "50%", background: "var(--sky)", opacity: 0.05, filter: "blur(55px)", pointerEvents: "none" }}
       />
-
-      {/* Corner label */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
         style={{ position: "absolute", top: "clamp(90px,13vw,120px)", right: "clamp(20px,4vw,48px)", textAlign: "right", borderRight: "2px solid var(--amber)", paddingRight: 12 }}>
         <Mono style={{ display: "block", color: "var(--amber)" }}>Portfolio</Mono>
         <Mono style={{ display: "block" }}>Issue 2025</Mono>
       </motion.div>
-
       <motion.div style={{ y: yPx, opacity: op }}>
         <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.6 }} style={{ marginBottom: 20 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "var(--black)", padding: "6px 14px" }}>
@@ -737,8 +682,6 @@ function HeroSection() {
             <Mono style={{ color: "var(--white)", fontSize: 9 }}>Business Analyst</Mono>
           </div>
         </motion.div>
-
-        {/* Giant italic name */}
         <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
           style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(3.2rem,12vw,11rem)", fontWeight: 900, lineHeight: 0.88, letterSpacing: "-0.04em", color: "var(--black)", fontStyle: "italic", marginBottom: 0 }}
         >
@@ -749,31 +692,18 @@ function HeroSection() {
             </span>
           ))}
         </motion.h1>
-
-        {/* Rainbow line */}
         <motion.div initial={{ scaleX: 0, originX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.0, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
           style={{ height: 4, margin: "28px 0 24px", background: `linear-gradient(90deg,var(--amber),var(--rose),var(--sky),var(--emerald),var(--violet),var(--pink),var(--cyan))` }}
         />
-
-        {/* Tags */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}
           style={{ display: "flex", gap: 6, marginBottom: 32, flexWrap: "wrap" }}
         >
-          {[
-            { label: "Next.js", color: "var(--amber)" },
-            { label: "TypeScript", color: "var(--sky)" },
-            { label: "Node.js", color: "var(--emerald)" },
-            { label: "PostgreSQL", color: "var(--violet)" },
-            { label: "Figma", color: "var(--rose)" },
-            
-          ].map(({ label, color }) => (
-            <motion.span key={label}
-              whileHover={{ y: -3, scale: 1.05 }}
+          {[{ label: "Next.js", color: "var(--amber)" },{ label: "TypeScript", color: "var(--sky)" },{ label: "Node.js", color: "var(--emerald)" },{ label: "PostgreSQL", color: "var(--violet)" },{ label: "Figma", color: "var(--rose)" }].map(({ label, color }) => (
+            <motion.span key={label} whileHover={{ y: -3, scale: 1.05 }}
               style={{ fontFamily: "var(--ff-mono)", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", border: `1.5px solid ${color}`, color, padding: "5px 12px", background: `${color}0d`, cursor: "default" }}
             >{label}</motion.span>
           ))}
         </motion.div>
-
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
             style={{ fontFamily: "var(--ff-mono)", fontSize: 12, color: "var(--mid)", lineHeight: 1.9, maxWidth: 360 }}
@@ -799,29 +729,22 @@ function HeroSection() {
           </motion.div>
         </div>
       </motion.div>
-
-      {/* Bottom rule */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, background: "var(--rule)" }} />
     </section>
   )
 }
 
-/* ─── ACTIVITY CARD ── */
 function ACard({ a, idx, ratio = "4/3" }: { a: typeof ACTIVITIES[0]; idx: number; ratio?: string }) {
   const [hov, setHov] = useState(false)
   return (
     <Reveal delay={idx * 0.5}>
-      <motion.div
-        onHoverStart={() => setHov(true)}
-        onHoverEnd={() => setHov(false)}
+      <motion.div onHoverStart={() => setHov(true)} onHoverEnd={() => setHov(false)}
         style={{ position: "relative", overflow: "hidden", background: "#0a0a08" }}
       >
         <div style={{ position: "relative", width: "100%", aspectRatio: ratio, overflow: "hidden", background: "#111" }}>
           {a.image ? (
-            <motion.img
-              src={a.image} alt={a.title}
-              animate={{ scale: hov ? 1.06 : 1 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            <motion.img src={a.image} alt={a.title}
+              animate={{ scale: hov ? 1.06 : 1 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
             />
           ) : (
@@ -829,21 +752,13 @@ function ACard({ a, idx, ratio = "4/3" }: { a: typeof ACTIVITIES[0]; idx: number
               <p style={{ fontFamily: "var(--ff-impact)", fontSize: "clamp(60px,10vw,100px)", color: a.accent, opacity: 0.12, userSelect: "none", letterSpacing: "0.05em" }}>{a.no}</p>
             </div>
           )}
-
-          {/* Gradient scrim */}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.15) 50%, transparent 75%)", pointerEvents: "none" }} />
-
-          {/* Top accent line */}
           <motion.div animate={{ scaleX: hov ? 1 : 0.3, originX: 0 }} transition={{ duration: 0.4 }}
             style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: a.accent }}
           />
-
-          {/* No badge */}
           <div style={{ position: "absolute", top: 14, left: 14, background: "rgba(0,0,0,0.7)", border: `1px solid ${a.accent}55`, padding: "3px 10px", backdropFilter: "blur(8px)" }}>
             <span style={{ fontFamily: "var(--ff-impact)", fontSize: 18, color: a.accent, letterSpacing: "0.05em", lineHeight: 1 }}>{a.no}</span>
           </div>
-
-          {/* Text overlay */}
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 20px 22px" }}>
             <p style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(13px,1.5vw,16px)", fontWeight: 700, letterSpacing: "-0.01em", color: "#fff", fontStyle: "italic", lineHeight: 1.25, marginBottom: 4 }}>{a.title}</p>
             <Mono style={{ color: "rgba(255,255,255,0.4)", fontSize: 9 }}>{a.role} · {a.year}</Mono>
@@ -861,33 +776,21 @@ function ACard({ a, idx, ratio = "4/3" }: { a: typeof ACTIVITIES[0]; idx: number
   )
 }
 
-/* ─── ACTIVITIES SECTION ── */
 function ActivitiesSection() {
   const rows: (typeof ACTIVITIES[0])[][] = []
   for (let i = 0; i < ACTIVITIES.length; i += 3) rows.push(ACTIVITIES.slice(i, i + 3))
-
   const tickerItems = ["Leadership", "Athlete", "Performer", "Media Team", "Open House", "Programming", "MC", "Staff", "Basketball", "Futsal", "Marathon", "Content Creator"]
-
   return (
     <section id="activities" style={{ background: "#080806" }}>
-      {/* Skew divider from hero (light) to activities (dark) */}
       <SkewDivider fromColor="var(--bg)" toColor="#080806" direction="down" />
-
-      {/* Top marquee */}
-      <Marquee
-        items={tickerItems}
-        bg="var(--amber)"
-        color="#080806"
-      />
-
+      <Marquee items={tickerItems} bg="var(--amber)" color="#080806" />
       <div className="section-pad" style={{ padding: "80px 48px 100px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal>
             <SectionLabel number="01" label="University Activities" color="#f59e0b" />
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 48, flexWrap: "wrap", gap: 12 }}>
               <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(2.4rem,6vw,5rem)", fontWeight: 900, letterSpacing: "-0.03em", fontStyle: "italic", color: "#fff", lineHeight: 0.95 }}>
-                University<br />
-                <span style={{ color: "var(--amber)", WebkitTextStroke: "0px" }}>Activities</span>
+                University<br /><span style={{ color: "var(--amber)" }}>Activities</span>
               </h2>
               <div style={{ textAlign: "right" }}>
                 <p style={{ fontFamily: "var(--ff-impact)", fontSize: 80, color: "#fff", opacity: 0.06, lineHeight: 1, letterSpacing: "-0.02em" }}>{ACTIVITIES.length}</p>
@@ -895,8 +798,6 @@ function ActivitiesSection() {
               </div>
             </div>
           </Reveal>
-
-          {/* Mosaic grid */}
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             {rows.map((row, ri) => {
               const isEven = ri % 2 === 0
@@ -932,15 +833,8 @@ function ActivitiesSection() {
               return <div key={ri}><ACard a={row[0]} idx={ri * 3} ratio="21/9" /></div>
             })}
           </div>
-
-          {/* Counter stats row */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 2, marginTop: 4 }}>
-            {[
-              { to: 13, label: "Activities", color: "var(--amber)" },
-              { to: 4,  label: "Projects",   color: "var(--rose)" },
-              { to: 2,  label: "Years Study", color: "var(--sky)" },
-              { to: 8,  label: "Hard Skills", color: "var(--emerald)" },
-            ].map(c => (
+            {[{ to: 13, label: "Activities", color: "var(--amber)" },{ to: 4, label: "Projects", color: "var(--rose)" },{ to: 2, label: "Years Study", color: "var(--sky)" },{ to: 8, label: "Hard Skills", color: "var(--emerald)" }].map(c => (
               <div key={c.label} style={{ background: "#0d0d0b", padding: "28px 16px", borderTop: `3px solid ${c.color}` }}>
                 <Counter to={c.to} label={c.label} color={c.color} />
               </div>
@@ -948,13 +842,53 @@ function ActivitiesSection() {
           </div>
         </div>
       </div>
-
-      {/* Bottom marquee */}
-      <Marquee items={[ "TypeScript", "Flutter", "Firebase",   "Figma", "Tailwind"]} bg="#0f0f0d" color="#555" />
-
-      {/* Skew divider dark→dark (projects is also dark) */}
+      <Marquee items={["TypeScript", "Flutter", "Firebase", "Figma", "Tailwind"]} bg="#0f0f0d" color="#555" />
       <SkewDivider fromColor="#080806" toColor="var(--black)" direction="up" />
     </section>
+  )
+}
+
+/* ─── MOBILE TAP HINT BADGE ── */
+function TapHintBadge({ accent }: { accent: string }) {
+  return (
+    <div className="proj-tap-hint" style={{
+      display: "none", /* overridden by mobile CSS */
+      position: "absolute", top: 14, right: 14,
+      alignItems: "center", gap: 6,
+      background: "rgba(0,0,0,0.75)",
+      border: `1px solid ${accent}60`,
+      backdropFilter: "blur(8px)",
+      padding: "5px 10px",
+      borderRadius: 2,
+      zIndex: 5,
+      animation: "tapPulse 2s ease-in-out infinite",
+    }}>
+      {/* Finger tap icon */}
+      <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 0.5C6.55 0.5 7 0.95 7 1.5V6.27C7.3 6.1 7.63 6 8 6C8.55 6 9.05 6.23 9.41 6.59L9.5 6.7V4.5C9.5 3.95 9.95 3.5 10.5 3.5C11.05 3.5 11.5 3.95 11.5 4.5V8.5C11.5 11.26 9.26 13.5 6.5 13.5H5.5C3.01 13.5 1 11.49 1 9V4.5C1 3.95 1.45 3.5 2 3.5C2.55 3.5 3 3.95 3 4.5V6.27C3.3 6.1 3.63 6 4 6C4.37 6 4.7 6.1 5 6.27V1.5C5 0.95 5.45 0.5 6 0.5Z" fill={accent}/>
+      </svg>
+      <span style={{ fontFamily: "var(--ff-mono)", fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: accent }}>แตะเพื่อดู</span>
+    </div>
+  )
+}
+
+/* ─── MOBILE TAP BAR (bottom of card) ── */
+function MobileTapBar({ accent }: { accent: string }) {
+  return (
+    <div className="proj-card-tap-bar" style={{
+      display: "none", /* overridden by mobile CSS */
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+      background: accent,
+      padding: "12px 20px",
+      width: "100%",
+    }}>
+      <span style={{ fontFamily: "var(--ff-impact)", fontSize: 13, letterSpacing: "0.18em", color: "#000" }}>
+        TAP TO OPEN PROJECT
+      </span>
+      <span style={{ fontFamily: "var(--ff-impact)", fontSize: 14, color: "#000" }}>↗</span>
+    </div>
   )
 }
 
@@ -962,13 +896,25 @@ function ActivitiesSection() {
 function ProjectsSection() {
   const [hov, setHov] = useState<number | null>(null)
   const [sel, setSel] = useState<Project | null>(null)
+  const [ripples, setRipples] = useState<{ id: number; x: number; y: number; color: string }[]>([])
+
+  const handleCardClick = (project: Project, e: React.MouseEvent<HTMLDivElement>) => {
+    // Ripple effect
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const newRipple = { id: Date.now(), x, y, color: project.accent }
+    setRipples(prev => [...prev, newRipple])
+    setTimeout(() => setRipples(prev => prev.filter(r => r.id !== newRipple.id)), 700)
+    setSel(project)
+  }
 
   return (
     <>
       <ProjectModal project={sel} onClose={() => setSel(null)} />
       <section id="projects" style={{ background: "var(--bg)", paddingBottom: 0 }}>
 
-        {/* Header band — dark */}
+        {/* Header band */}
         <div style={{ background: "var(--black)", padding: "80px clamp(20px,4vw,48px) 60px" }}>
           <div style={{ maxWidth: 1240, margin: "0 auto" }}>
             <Reveal>
@@ -979,10 +925,34 @@ function ProjectsSection() {
                   <br />
                   <StaggerText text="Work Experience" charStyle={{ color: "var(--rose)" }} />
                 </h2>
-                <Mono style={{ color: "#333" }}>Click to explore →</Mono>
+                {/* Desktop hint */}
+                <div className="proj-desktop-hint" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                  <Mono style={{ color: "#555" }}>Click to explore →</Mono>
+                </div>
               </div>
             </Reveal>
-            {/* 4-color rule */}
+
+            {/* Mobile hint banner — shown only on mobile */}
+            <div className="proj-tap-hint" style={{
+              display: "none",
+              marginTop: 20,
+              alignItems: "center",
+              gap: 10,
+              background: "#1a1a18",
+              border: "1px solid #f43f5e40",
+              borderLeft: "3px solid var(--rose)",
+              padding: "10px 16px",
+            }}>
+              <motion.div
+                animate={{ scale: [1, 1.3, 1] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+                style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--rose)", flexShrink: 0 }}
+              />
+              <span style={{ fontFamily: "var(--ff-mono)", fontSize: 10, letterSpacing: "0.18em", color: "#f43f5e" }}>
+                แตะที่การ์ดเพื่อดูรายละเอียด
+              </span>
+            </div>
+
             <motion.div style={{ height: 4, marginTop: 40, background: `linear-gradient(90deg,var(--amber) 0%,var(--rose) 33%,var(--sky) 66%,var(--emerald) 100%)` }}
               initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
@@ -997,12 +967,27 @@ function ProjectsSection() {
               <Reveal key={i} delay={i * 0.5}>
                 <motion.div
                   onHoverStart={() => setHov(i)} onHoverEnd={() => setHov(null)}
-                  onClick={() => setSel(p)}
-                  style={{ cursor: "pointer", background: "#0d0d0b", overflow: "hidden", position: "relative", borderLeft: `3px solid ${p.accent}`, transition: "border-color .2s" }}
+                  onClick={(e) => handleCardClick(p, e)}
+                  style={{
+                    cursor: "pointer",
+                    background: "#0d0d0b",
+                    overflow: "hidden",
+                    position: "relative",
+                    borderLeft: `3px solid ${p.accent}`,
+                    transition: "border-color .2s",
+                  }}
                 >
+                  {/* Ripple container */}
+                  {ripples.map(r => (
+                    <span key={r.id} className="tap-ripple"
+                      style={{ left: r.x, top: r.y, background: r.color }}
+                    />
+                  ))}
+
+                  {/* Mobile: stack image on top, text below */}
                   <div className="proj-card-inner" style={{ display: "grid", gridTemplateColumns: "auto 1fr" }}>
                     {/* Image block */}
-                    <div style={{ position: "relative", background: "#080806", overflow: "hidden", width: "clamp(180px, 32vw, 400px)", flexShrink: 0 }}>
+                    <div className="proj-img-block" style={{ position: "relative", background: "#080806", overflow: "hidden", width: "clamp(180px, 32vw, 400px)", flexShrink: 0 }}>
                       {p.images.length > 0 ? (
                         <motion.img src={p.images[0]} alt={p.title}
                           animate={{ scale: hov === i ? 1.03 : 1 }}
@@ -1016,15 +1001,22 @@ function ProjectsSection() {
                           </div>
                         </div>
                       )}
+
+                      {/* Mobile tap hint badge (top-right of image) */}
+                      <TapHintBadge accent={p.accent} />
+
+                      {/* Image count badge */}
                       {p.images.length > 1 && (
                         <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(0,0,0,0.8)", border: `1px solid ${p.accent}55`, padding: "3px 10px", display: "flex", alignItems: "center", gap: 5, backdropFilter: "blur(6px)" }}>
                           <span style={{ color: p.accent, fontSize: 10 }}>⊞</span>
                           <Mono style={{ color: p.accent, fontSize: 9 }}>{p.images.length}</Mono>
                         </div>
                       )}
-                      {/* Hover overlay */}
+
+                      {/* Desktop hover overlay */}
                       <motion.div animate={{ opacity: hov === i ? 1 : 0 }}
-                        style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        className="proj-desktop-hint"
+                        style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                         <span style={{ fontFamily: "var(--ff-impact)", fontSize: 13, letterSpacing: "0.2em", color: "#fff", border: `2px solid ${p.accent}`, padding: "10px 20px", background: `${p.accent}15` }}>OPEN PROJECT</span>
                       </motion.div>
                     </div>
@@ -1049,6 +1041,31 @@ function ProjectsSection() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Mobile bottom tap bar */}
+                  <MobileTapBar accent={p.accent} />
+
+                  {/* Mobile: subtle corner arrow indicator */}
+                  <div className="proj-tap-hint" style={{
+                    display: "none",
+                    position: "absolute",
+                    bottom: 52, /* above the tap bar */
+                    right: 14,
+                    alignItems: "center",
+                    gap: 4,
+                  }}>
+                    <motion.div
+                      animate={{ y: [0, -3, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}
+                      style={{
+                        fontFamily: "var(--ff-impact)",
+                        fontSize: 18,
+                        color: p.accent,
+                        opacity: 0.7,
+                        lineHeight: 1,
+                      }}
+                    >↗</motion.div>
+                  </div>
                 </motion.div>
               </Reveal>
             ))}
@@ -1059,7 +1076,6 @@ function ProjectsSection() {
   )
 }
 
-/* ─── TIER BADGE ── */
 const TIER_CONFIG = {
   strong:   { label: "เชี่ยวชาญ",   bg: "var(--black)",  text: "var(--amber)",   border: "var(--amber)" },
   good:     { label: "ใช้งานได้ดี",  bg: "transparent",   text: "var(--sky)",     border: "var(--sky)" },
@@ -1075,17 +1091,14 @@ function TierBadge({ tier }: { tier: "strong" | "good" | "learning" }) {
   )
 }
 
-/* ─── SKILL ROW ── */
 function SkillRow({ s, delay }: { s: typeof HARD_SKILLS[0]; delay: number }) {
   const [hov, setHov] = useState(false)
   return (
     <Reveal delay={delay}>
-      <motion.div
-        onHoverStart={() => setHov(true)} onHoverEnd={() => setHov(false)}
+      <motion.div onHoverStart={() => setHov(true)} onHoverEnd={() => setHov(false)}
         style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 0", borderBottom: "1px solid var(--rule)", gap: 12, cursor: "default" }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-          {/* Accent dot */}
           <motion.div animate={{ scale: hov ? 1.6 : 1, background: hov ? s.accent : "var(--rule)" }}
             transition={{ duration: 0.2 }}
             style={{ width: 8, height: 8, borderRadius: "50%", flexShrink: 0, background: "var(--rule)" }}
@@ -1094,9 +1107,7 @@ function SkillRow({ s, delay }: { s: typeof HARD_SKILLS[0]; delay: number }) {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <motion.span animate={{ opacity: hov ? 1 : 0, x: hov ? 0 : 6 }} transition={{ duration: 0.2 }}
-            style={{ fontFamily: "var(--ff-mono)", fontSize: 9, color: "var(--mid)", whiteSpace: "nowrap" }}>
-            {s.proof}
-          </motion.span>
+            style={{ fontFamily: "var(--ff-mono)", fontSize: 9, color: "var(--mid)", whiteSpace: "nowrap" }}>{s.proof}</motion.span>
           <TierBadge tier={s.tier as "strong" | "good" | "learning"} />
         </div>
       </motion.div>
@@ -1104,16 +1115,12 @@ function SkillRow({ s, delay }: { s: typeof HARD_SKILLS[0]; delay: number }) {
   )
 }
 
-/* ─── SKILLS SECTION ── */
 function SkillsSection() {
   const [activeTab, setActiveTab] = useState<"hard" | "soft">("hard")
-
   return (
     <section id="skills" className="section-pad" style={{ padding: "0 0 120px", background: "var(--bg)" }}>
       <SkewDivider fromColor="var(--black)" toColor="var(--bg)" direction="up" />
       <div className="section-pad" style={{ padding: "60px 48px 0", maxWidth: 1200, margin: "0 auto" }}>
-
-        {/* Header */}
         <Reveal>
           <SectionLabel number="03" label="Skills & Expertise" color="var(--violet)" />
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 12 }}>
@@ -1121,35 +1128,23 @@ function SkillsSection() {
               <StaggerText text="Skills &" /><br />
               <StaggerText text="Expertise" charStyle={{ color: "var(--violet)" }} />
             </h2>
-            {/* Legend */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end" }}>
               {(["strong", "good", "learning"] as const).map(t => (
-                <div key={t} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <TierBadge tier={t} />
-                </div>
+                <div key={t} style={{ display: "flex", alignItems: "center", gap: 8 }}><TierBadge tier={t} /></div>
               ))}
             </div>
           </div>
         </Reveal>
-
-        {/* Tab switcher */}
         <Reveal>
           <div style={{ display: "flex", gap: 3, marginBottom: 8 }}>
-            {[
-              { key: "hard", label: "Hard Skills" },
-              { key: "soft", label: "Soft Skills" },
-            ].map(tab => (
+            {[{ key: "hard", label: "Hard Skills" },{ key: "soft", label: "Soft Skills" }].map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key as "hard" | "soft")}
                 style={{ fontFamily: "var(--ff-impact)", fontSize: 15, letterSpacing: "0.12em", padding: "10px 24px", cursor: "pointer", border: "2px solid var(--black)", transition: "all .2s", background: activeTab === tab.key ? "var(--black)" : "transparent", color: activeTab === tab.key ? "var(--amber)" : "var(--black)" }}
               >{tab.label}</button>
             ))}
           </div>
         </Reveal>
-
-        {/* Skill list + Tools side by side */}
         <div className="skills-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 80px", alignItems: "start" }}>
-
-          {/* Left: skill list */}
           <div>
             <AnimatePresence mode="wait">
               <motion.div key={activeTab}
@@ -1162,8 +1157,6 @@ function SkillsSection() {
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* Right: tools by project */}
           <div>
             <Reveal delay={1}><Mono style={{ display: "block", marginBottom: 20 }}>Tools & Workflow — by Project</Mono></Reveal>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -1176,8 +1169,7 @@ function SkillsSection() {
                     </div>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
                       {group.tools.map(t => (
-                        <motion.span key={t}
-                          whileHover={{ y: -2 }}
+                        <motion.span key={t} whileHover={{ y: -2 }}
                           style={{ fontFamily: "var(--ff-mono)", fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", border: `1px solid ${group.accent}50`, color: "var(--black)", padding: "3px 9px", background: `${group.accent}10`, cursor: "default" }}
                         >{t}</motion.span>
                       ))}
@@ -1186,7 +1178,6 @@ function SkillsSection() {
                 </Reveal>
               ))}
             </div>
-
           </div>
         </div>
       </div>
@@ -1194,91 +1185,74 @@ function SkillsSection() {
   )
 }
 
-/* ─── CONTACT SECTION ── */
 function ContactSection() {
   return (
     <>
       <SkewDivider fromColor="var(--bg)" toColor="var(--black)" direction="down" />
       <section id="contact" className="section-pad" style={{ padding: "100px 48px 72px", background: "var(--black)", color: "var(--white)", position: "relative", overflow: "hidden" }}>
-
-      {/* Giant ghost text */}
-      <div style={{ position: "absolute", bottom: -20, left: -20, fontFamily: "var(--ff-impact)", fontSize: "clamp(80px,20vw,240px)", color: "var(--white)", opacity: 0.02, letterSpacing: "-0.04em", userSelect: "none", pointerEvents: "none", lineHeight: 1 }}>HELLO</div>
-
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
-        <Reveal>
-          <SectionLabel number="04" label="Get In Touch" color="var(--rose)" />
-          <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(3rem,10vw,9rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 0.88, fontStyle: "italic", marginBottom: 56 }}>
-            Let's Build<br />
-            <span style={{ color: "#2a2a2a" }}>Something</span><br />
-            <span style={{ color: "var(--amber)" }}>Together.</span>
-          </h2>
-        </Reveal>
-
-        {/* Rainbow rule */}
-        <motion.div style={{ height: 4, marginBottom: 48, background: `linear-gradient(90deg,var(--amber),var(--rose),var(--sky),var(--emerald),var(--violet))` }}
-          initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        />
-
-        <Reveal delay={1}>
-          <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 40px" }}>
-            <div>
-              <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Email</Mono>
-              <a href="mailto:thanakornwork12@gmail.com"
-                style={{ fontFamily: "var(--ff-mono)", fontSize: 12, color: "#fff", borderBottom: "2px solid #2a2a2a", paddingBottom: 3, wordBreak: "break-all", transition: "border-color .2s" }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = "var(--amber)"}
-                onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a2a"}
-              >thanakornwork12@gmail.com</a>
-            </div>
-            <div>
-              <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Social</Mono>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[["Facebook", "var(--sky)"],].map(([s, c]) => (
-                  <a key={s} href="https://www.facebook.com/Nknooky12"
+        <div style={{ position: "absolute", bottom: -20, left: -20, fontFamily: "var(--ff-impact)", fontSize: "clamp(80px,20vw,240px)", color: "var(--white)", opacity: 0.02, letterSpacing: "-0.04em", userSelect: "none", pointerEvents: "none", lineHeight: 1 }}>HELLO</div>
+        <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
+          <Reveal>
+            <SectionLabel number="04" label="Get In Touch" color="var(--rose)" />
+            <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(3rem,10vw,9rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 0.88, fontStyle: "italic", marginBottom: 56 }}>
+              Let's Build<br /><span style={{ color: "#2a2a2a" }}>Something</span><br /><span style={{ color: "var(--amber)" }}>Together.</span>
+            </h2>
+          </Reveal>
+          <motion.div style={{ height: 4, marginBottom: 48, background: `linear-gradient(90deg,var(--amber),var(--rose),var(--sky),var(--emerald),var(--violet))` }}
+            initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          />
+          <Reveal delay={1}>
+            <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 40px" }}>
+              <div>
+                <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Email</Mono>
+                <a href="mailto:thanakornwork12@gmail.com"
+                  style={{ fontFamily: "var(--ff-mono)", fontSize: 12, color: "#fff", borderBottom: "2px solid #2a2a2a", paddingBottom: 3, wordBreak: "break-all", transition: "border-color .2s" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "var(--amber)"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a2a"}
+                >thanakornwork12@gmail.com</a>
+              </div>
+              <div>
+                <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Social</Mono>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  <a href="https://www.facebook.com/Nknooky12"
                     style={{ fontFamily: "var(--ff-impact)", fontSize: 18, letterSpacing: "0.1em", color: "#fff", borderBottom: "2px solid #2a2a2a", paddingBottom: 3, width: "fit-content", transition: "all .2s" }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = c; e.currentTarget.style.color = c }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--sky)"; e.currentTarget.style.color = "var(--sky)" }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = "#2a2a2a"; e.currentTarget.style.color = "#fff" }}
-                  >{s} ↗</a>
-                  
-                ))}
-                
+                  >Facebook ↗</a>
+                </div>
+              </div>
+              <div>
+                <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Status</Mono>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid #2a2a2a", padding: "10px 16px", background: "#0e0e0c" }}>
+                  <motion.div animate={{ opacity: [1, 0.2, 1], scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 2.2 }}
+                    style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--emerald)", flexShrink: 0 }}
+                  />
+                  <span style={{ fontFamily: "var(--ff-mono)", fontSize: 11, color: "#888" }}>Available — Open to work</span>
+                </div>
               </div>
             </div>
-            <div>
-              <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Status</Mono>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid #2a2a2a", padding: "10px 16px", background: "#0e0e0c" }}>
-                <motion.div animate={{ opacity: [1, 0.2, 1], scale: [1, 1.4, 1] }} transition={{ repeat: Infinity, duration: 2.2 }}
-                  style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--emerald)", flexShrink: 0 }}
-                />
-                <span style={{ fontFamily: "var(--ff-mono)", fontSize: 11, color: "#888" }}>Available — Open to work</span>
-              </div>
-            </div>
+          </Reveal>
+          <div style={{ height: 1, background: "#1a1a1a", margin: "72px 0 28px" }} />
+          <div className="footer-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+            <span style={{ fontFamily: "var(--ff-impact)", fontSize: 14, letterSpacing: "0.1em", color: "#2a2a2a" }}>© THANAKORN THONGSA 2025</span>
+            <Mono style={{ color: "#2a2a2a" }}>Portfolio — Issue 2025</Mono>
+            <Mono style={{ color: "#2a2a2a" }}>Built with Next.js & Framer Motion</Mono>
           </div>
-        </Reveal>
-
-        <div style={{ height: 1, background: "#1a1a1a", margin: "72px 0 28px" }} />
-        <div className="footer-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-          <span style={{ fontFamily: "var(--ff-impact)", fontSize: 14, letterSpacing: "0.1em", color: "#2a2a2a" }}>© THANAKORN THONGSA 2025</span>
-          <Mono style={{ color: "#2a2a2a" }}>Portfolio — Issue 2025</Mono>
-          <Mono style={{ color: "#2a2a2a" }}>Built with Next.js & Framer Motion</Mono>
         </div>
-      </div>
-    </section>
+      </section>
     </>
   )
 }
 
-/* ─── ROOT ── */
 export default function Portfolio() {
   const [loaded, setLoaded] = useState(false)
-
   return (
     <>
       <FontLoader />
       <AnimatePresence>
         {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
       </AnimatePresence>
-
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: loaded ? 1 : 0 }}
