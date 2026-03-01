@@ -75,6 +75,22 @@ function FontLoader() {
 
       /* Cursor blink */
       @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+      /* Hide default cursor */
+      * { cursor: none !important; }
+
+      /* Diagonal divider clip */
+      .clip-skew-down  { clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%); margin-bottom: -6vw; }
+      .clip-skew-up    { clip-path: polygon(0 6vw, 100% 0, 100% 100%, 0 100%); padding-top: 6vw; }
+      .clip-skew-both  { clip-path: polygon(0 4vw, 100% 0, 100% calc(100% - 4vw), 0 100%); padding: 6vw 0; margin-bottom: -4vw; }
+
+      /* Stagger letter animation */
+      @keyframes letterIn {
+        from { opacity: 0; transform: translateY(80%) skewY(8deg); }
+        to   { opacity: 1; transform: translateY(0) skewY(0deg); }
+      }
+      .letter-wrap { overflow: hidden; display: inline-block; }
+      .letter-char { display: inline-block; animation: letterIn 0.7s cubic-bezier(0.22,1,0.36,1) both; }
     `}</style>
   )
 }
@@ -97,7 +113,7 @@ const ACTIVITIES = [
 
 const PROJECTS = [
   {
-    no: "01", title: "DadBuddy Mobile Application", client: "Boromarajonani College of Nursing, Yala", year: "2024",
+    no: "01", title: "DadBuddy Mobile Application ทำให้กับ วิทยาลัยพยาบาลบรมราชชนนี ยะลา", client: "Boromarajonani College of Nursing, Yala", year: "2024",
     tags: ["Flutter", "Firebase", "Hive", "Mobile App"], accent: "var(--emerald)",
     imageBg: "linear-gradient(135deg,#10b98128,#10b98106)",
     images: ["images/dadbuddy1.png","images/dadbuddylogin.png","images/dadbuddy2.png","images/dadbuddy3.png","images/dadbuddy4.png","images/dadbuddy5.png","images/dadbuddy6.png","images/dadbuddy7.png"],
@@ -115,22 +131,13 @@ const PROJECTS = [
     outcome: "จัดการออเดอร์ได้แม่นยำและตรงเวลา", duration: "2 เดือน", link: "#",
   },
   {
-    no: "03", title: "UBU Green – Campus Sustainability Platform", client: "Ubon Ratchathani University", year: "2026",
+    no: "03", title: "UBU Green – สะสมแต้ม ในโครงการของมหาลัย", client: "Ubon Ratchathani University", year: "2026",
     tags: ["Web App", "Sustainability", "Dashboard", "Gamification"], accent: "var(--lime)",
     imageBg: "linear-gradient(135deg,#a3e63528,#a3e63506)",
     images: ["images/ubugreen.png"],
     shortDesc: "แพลตฟอร์มส่งเสริมพฤติกรรมรักษ์โลก พร้อมระบบสะสมแต้มและ dashboard วิเคราะห์ข้อมูล",
     fullDesc: `UBU Green เป็นแพลตฟอร์มสนับสนุนแนวคิด Green University\n\n• **Activity Tracking** — บันทึกกิจกรรมรักษ์โลก\n\n• **Point & Reward System** — ระบบสะสมคะแนน Gamification\n\n• **Dashboard & Analytics** — แสดงสถิติการมีส่วนร่วม\n\n• **User-Centered Design** — รองรับมือถือและเดสก์ท็อป`,
     outcome: "เพิ่มการมีส่วนร่วมในกิจกรรมสิ่งแวดล้อม", duration: "2 เดือน", link: "#",
-  },
-  {
-    no: "04", title: "Photography Portfolio", client: "Freelance Photographer", year: "2023",
-    tags: ["Next.js", "Framer Motion", "Cloudinary"], accent: "var(--violet)",
-    imageBg: "linear-gradient(135deg,#8b5cf628,#8b5cf606)",
-    images: [] as string[],
-    shortDesc: "เว็บ portfolio รูปภาพ โหลดเร็ว gallery masonry และ lightbox full-screen",
-    fullDesc: `เว็บ portfolio สำหรับช่างภาพ freelance:\n\n• **Masonry Gallery** — grid ปรับ layout อัตโนมัติ\n\n• **Lightbox** — full-screen พร้อม swipe gesture\n\n• **Cloudinary CDN** — ปรับขนาดและ format อัตโนมัติ (WebP/AVIF)\n\n• **CMS** — เพิ่มผลงานได้เองผ่าน Sanity`,
-    outcome: "Lighthouse 98/100 · FCP < 0.8s", duration: "3 สัปดาห์", link: "#",
   },
 ]
 
@@ -149,6 +156,7 @@ const HARD_SKILLS = [
   { label: "Tailwind CSS",         tier: "good",     accent: "var(--pink)",    proof: "UBU Green · Web Projects" },
 
 ]
+
 const SOFT_SKILLS = [
   { label: "Public Speaking & MC",    tier: "strong",   accent: "var(--amber)",   proof: "IT Night 2568 — MC บนเวที" },
   { label: "Leadership & Organizing", tier: "strong",   accent: "var(--rose)",    proof: "สตาฟรับน้อง · Open House" },
@@ -172,6 +180,8 @@ const TOOL_GROUPS = [
     accent: "var(--lime)",
     tools: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Prisma"],
   },
+
+
 ]
 
 /* ─── Shared ── */
@@ -192,6 +202,271 @@ function Mono({ children, style = {} }: { children: ReactNode; style?: React.CSS
     <span style={{ fontFamily: "var(--ff-mono)", fontSize: "10px", letterSpacing: "0.35em", textTransform: "uppercase" as const, color: "var(--mid)", ...style }}>
       {children}
     </span>
+  )
+}
+
+/* ─── SECTION CONFIG for cursor & side-nav ── */
+const SECTIONS = [
+  { id: "hero",       label: "Home",       color: "var(--amber)" },
+  { id: "activities", label: "Activities", color: "var(--amber)" },
+  { id: "projects",   label: "Projects",   color: "var(--rose)" },
+  { id: "skills",     label: "Skills",     color: "var(--violet)" },
+  { id: "contact",    label: "Contact",    color: "var(--emerald)" },
+]
+
+/* ─── LOADING SCREEN ── */
+function LoadingScreen({ onDone }: { onDone: () => void }) {
+  const [progress, setProgress] = useState(0)
+  const [phase, setPhase] = useState<"counting" | "done">("counting")
+
+  useEffect(() => {
+    let p = 0
+    const step = () => {
+      p += Math.random() * 12 + 4
+      if (p >= 100) {
+        setProgress(100)
+        setPhase("done")
+        setTimeout(onDone, 700)
+      } else {
+        setProgress(p)
+        setTimeout(step, 60 + Math.random() * 80)
+      }
+    }
+    setTimeout(step, 200)
+  }, [onDone])
+
+  return (
+    <AnimatePresence>
+      {phase !== "done" || true ? (
+        <motion.div
+          key="loader"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: phase === "done" ? 0 : 1 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          onAnimationComplete={() => { if (phase === "done") onDone() }}
+          style={{ position: "fixed", inset: 0, zIndex: 9000, background: "var(--black)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32, pointerEvents: phase === "done" ? "none" : "all" }}
+        >
+          {/* Monogram */}
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(60px,15vw,120px)", fontWeight: 900, fontStyle: "italic", color: "var(--white)", letterSpacing: "-0.05em", lineHeight: 1 }}
+          >TT.</motion.div>
+
+          {/* Progress bar */}
+          <div style={{ width: "min(320px, 60vw)" }}>
+            <div style={{ height: 2, background: "#1e1e1e", overflow: "hidden", marginBottom: 12 }}>
+              <motion.div
+                style={{ height: "100%", background: `linear-gradient(90deg,var(--amber),var(--rose),var(--sky),var(--emerald))`, originX: 0 }}
+                animate={{ scaleX: progress / 100 }}
+                transition={{ ease: "easeOut", duration: 0.15 }}
+              />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Mono style={{ color: "#444", fontSize: 9 }}>Loading Portfolio</Mono>
+              <span style={{ fontFamily: "var(--ff-impact)", fontSize: 16, color: "var(--amber)", letterSpacing: "0.05em" }}>{Math.round(progress)}%</span>
+            </div>
+          </div>
+
+          {/* Floating labels */}
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+            {["Flutter", "React", "Figma", "Python", "Firebase"].map((t, i) => (
+              <motion.span key={t}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: progress > (i + 1) * 18 ? 0.4 : 0, y: progress > (i + 1) * 18 ? 0 : 10 }}
+                style={{ fontFamily: "var(--ff-mono)", fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--mid)" }}
+              >{t}</motion.span>
+            ))}
+          </div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
+  )
+}
+
+/* ─── CUSTOM CURSOR ── */
+function CustomCursor() {
+  const [pos, setPos] = useState({ x: -100, y: -100 })
+  const [trail, setTrail] = useState({ x: -100, y: -100 })
+  const [sectionColor, setSectionColor] = useState("var(--amber)")
+  const [clicking, setClicking] = useState(false)
+  const [hovering, setHovering] = useState(false)
+  const trailRef = useRef({ x: -100, y: -100 })
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      setPos({ x: e.clientX, y: e.clientY })
+      // Detect section for color
+      const el = document.elementFromPoint(e.clientX, e.clientY)
+      const section = el?.closest("section")
+      const id = section?.id ?? "hero"
+      const found = SECTIONS.find(s => s.id === id)
+      if (found) setSectionColor(found.color)
+      // Detect hoverable
+      const target = el as HTMLElement
+      setHovering(!!(target?.closest("a") || target?.closest("button") || target?.closest("[data-hover]")))
+    }
+    const down = () => setClicking(true)
+    const up = () => setClicking(false)
+    window.addEventListener("mousemove", move)
+    window.addEventListener("mousedown", down)
+    window.addEventListener("mouseup", up)
+    return () => { window.removeEventListener("mousemove", move); window.removeEventListener("mousedown", down); window.removeEventListener("mouseup", up) }
+  }, [])
+
+  // Smooth trail
+  useEffect(() => {
+    let raf: number
+    const animate = () => {
+      trailRef.current = {
+        x: trailRef.current.x + (pos.x - trailRef.current.x) * 0.12,
+        y: trailRef.current.y + (pos.y - trailRef.current.y) * 0.12,
+      }
+      setTrail({ ...trailRef.current })
+      raf = requestAnimationFrame(animate)
+    }
+    raf = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(raf)
+  }, [pos])
+
+  return (
+    <>
+      {/* Outer ring — trailing */}
+      <div style={{
+        position: "fixed", left: trail.x, top: trail.y, zIndex: 8999, pointerEvents: "none",
+        width: hovering ? 48 : clicking ? 20 : 36, height: hovering ? 48 : clicking ? 20 : 36,
+        border: `1.5px solid ${sectionColor}`,
+        borderRadius: "50%",
+        transform: "translate(-50%, -50%)",
+        transition: "width 0.25s, height 0.25s, border-color 0.4s",
+        opacity: hovering ? 0.8 : 0.5,
+        mixBlendMode: "difference" as const,
+      }} />
+      {/* Inner dot — exact */}
+      <div style={{
+        position: "fixed", left: pos.x, top: pos.y, zIndex: 9000, pointerEvents: "none",
+        width: clicking ? 12 : 6, height: clicking ? 12 : 6,
+        background: sectionColor,
+        borderRadius: "50%",
+        transform: "translate(-50%, -50%)",
+        transition: "width 0.1s, height 0.1s, background 0.4s",
+      }} />
+    </>
+  )
+}
+
+/* ─── SIDE NAV DOTS ── */
+function SideNavDots() {
+  const [active, setActive] = useState("hero")
+
+  useEffect(() => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id) })
+    }, { threshold: 0.4 })
+    SECTIONS.forEach(s => {
+      const el = document.getElementById(s.id)
+      if (el) obs.observe(el)
+    })
+    return () => obs.disconnect()
+  }, [])
+
+  const activeSection = SECTIONS.find(s => s.id === active) ?? SECTIONS[0]
+
+  return (
+    <div className="hide-mobile" style={{ position: "fixed", right: 24, top: "50%", transform: "translateY(-50%)", zIndex: 150, display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+      {SECTIONS.map(s => {
+        const isActive = s.id === active
+        return (
+          <a key={s.id} href={`#${s.id}`} data-hover="1"
+            title={s.label}
+            style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}
+          >
+            {/* Label appears on active */}
+            <motion.span
+              animate={{ opacity: isActive ? 1 : 0, x: isActive ? 0 : 8 }}
+              transition={{ duration: 0.25 }}
+              style={{ fontFamily: "var(--ff-mono)", fontSize: 8, letterSpacing: "0.25em", textTransform: "uppercase", color: activeSection.color, whiteSpace: "nowrap" }}
+            >{s.label}</motion.span>
+            {/* Dot */}
+            <motion.div
+              animate={{ width: isActive ? 20 : 6, height: isActive ? 4 : 6, background: isActive ? activeSection.color : "#555", borderRadius: isActive ? 2 : "50%" }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              style={{ flexShrink: 0 }}
+            />
+          </a>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ─── ANIMATED COUNTER ── */
+function Counter({ to, label, color }: { to: number; label: string; color: string }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: "-60px" })
+  const [val, setVal] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    let start = 0
+    const duration = 1400
+    const startTime = performance.now()
+    const tick = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      // Ease out expo
+      const eased = 1 - Math.pow(1 - progress, 4)
+      setVal(Math.round(eased * to))
+      if (progress < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [inView, to])
+
+  return (
+    <div ref={ref} style={{ textAlign: "center" }}>
+      <div style={{ fontFamily: "var(--ff-impact)", fontSize: "clamp(48px,8vw,96px)", lineHeight: 1, color, letterSpacing: "-0.02em" }}>
+        {val}<span style={{ fontSize: "0.45em", color: `${color}88` }}>+</span>
+      </div>
+      <Mono style={{ color: "#555", fontSize: 9 }}>{label}</Mono>
+    </div>
+  )
+}
+
+/* ─── STAGGER TEXT ── */
+function StaggerText({ text, style = {}, charStyle = {} }: { text: string; style?: React.CSSProperties; charStyle?: React.CSSProperties }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: "-40px" })
+  return (
+    <span ref={ref} style={{ display: "inline-block", ...style }}>
+      {text.split("").map((char, i) => (
+        <span key={i} className="letter-wrap">
+          <span
+            className="letter-char"
+            style={{
+              animationDelay: inView ? `${i * 0.035}s` : "9999s",
+              animationPlayState: inView ? "running" : "paused",
+              ...charStyle,
+            }}
+          >{char === " " ? "\u00A0" : char}</span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+/* ─── SKEW DIVIDER ── */
+function SkewDivider({ fromColor, toColor, direction = "down" }: { fromColor: string; toColor: string; direction?: "down" | "up" }) {
+  return (
+    <div style={{ position: "relative", height: "6vw", minHeight: 48, overflow: "hidden", flexShrink: 0, zIndex: 1 }}>
+      <div style={{ position: "absolute", inset: 0, background: fromColor }} />
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+        {direction === "down"
+          ? <polygon points="0,0 1440,0 1440,80 0,20" fill={toColor} />
+          : <polygon points="0,20 1440,0 1440,80 0,80" fill={toColor} />
+        }
+      </svg>
+    </div>
   )
 }
 
@@ -427,7 +702,7 @@ function HeroSection() {
   useEffect(() => { const t = setInterval(() => setCursor(v => !v), 530); return () => clearInterval(t) }, [])
 
   return (
-    <section className="hero-pad"
+    <section id="hero" className="hero-pad"
       style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "0 48px 80px", position: "relative", overflow: "hidden", background: "var(--bg)" }}
     >
       {/* Big background number — watermark */}
@@ -451,7 +726,7 @@ function HeroSection() {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
         style={{ position: "absolute", top: "clamp(90px,13vw,120px)", right: "clamp(20px,4vw,48px)", textAlign: "right", borderRight: "2px solid var(--amber)", paddingRight: 12 }}>
         <Mono style={{ display: "block", color: "var(--amber)" }}>Portfolio</Mono>
-        
+        <Mono style={{ display: "block" }}>Issue 2025</Mono>
       </motion.div>
 
       <motion.div style={{ y: yPx, opacity: op }}>
@@ -491,7 +766,7 @@ function HeroSection() {
             { label: "Node.js", color: "var(--emerald)" },
             { label: "PostgreSQL", color: "var(--violet)" },
             { label: "Figma", color: "var(--rose)" },
-            { label: "Docker", color: "var(--cyan)" },
+            
           ].map(({ label, color }) => (
             <motion.span key={label}
               whileHover={{ y: -3, scale: 1.05 }}
@@ -504,9 +779,10 @@ function HeroSection() {
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
             style={{ fontFamily: "var(--ff-mono)", fontSize: 12, color: "var(--mid)", lineHeight: 1.9, maxWidth: 360 }}
           >
-            นักศึกษาคอมพิวเตอร์ปีสุดท้าย<br />
-            ที่ชอบสร้างสิ่งที่ทั้งสวยและใช้งานได้จริง<br />
-            พร้อมเติบโตในทีมที่ดี
+            Business Analyst ที่มีพื้นฐานด้านเทคโนโลยี  
+เข้าใจทั้งมุมธุรกิจและการพัฒนา  
+สามารถแปลงความต้องการให้เป็นระบบที่ใช้งานได้จริง  
+พร้อมเติบโตในทีม Product
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }}
             style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
@@ -591,20 +867,13 @@ function ActivitiesSection() {
   const rows: (typeof ACTIVITIES[0])[][] = []
   for (let i = 0; i < ACTIVITIES.length; i += 3) rows.push(ACTIVITIES.slice(i, i + 3))
 
-  const tickerItems = [
-  "Next.js",
-  "TypeScript",
-  "Flutter",
-  "Firebase",
-  "PostgreSQL",
-  "Docker",
-  "Figma",
-  "Framer Motion",
-  "Node.js",
-  "Tailwind",
-]
+  const tickerItems = ["Leadership", "Athlete", "Performer", "Media Team", "Open House", "Programming", "MC", "Staff", "Basketball", "Futsal", "Marathon", "Content Creator"]
+
   return (
     <section id="activities" style={{ background: "#080806" }}>
+      {/* Skew divider from hero (light) to activities (dark) */}
+      <SkewDivider fromColor="var(--bg)" toColor="#080806" direction="down" />
+
       {/* Top marquee */}
       <Marquee
         items={tickerItems}
@@ -664,11 +933,28 @@ function ActivitiesSection() {
               return <div key={ri}><ACard a={row[0]} idx={ri * 3} ratio="21/9" /></div>
             })}
           </div>
+
+          {/* Counter stats row */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 2, marginTop: 4 }}>
+            {[
+              { to: 13, label: "Activities", color: "var(--amber)" },
+              { to: 4,  label: "Projects",   color: "var(--rose)" },
+              { to: 2,  label: "Years Study", color: "var(--sky)" },
+              { to: 8,  label: "Hard Skills", color: "var(--emerald)" },
+            ].map(c => (
+              <div key={c.label} style={{ background: "#0d0d0b", padding: "28px 16px", borderTop: `3px solid ${c.color}` }}>
+                <Counter to={c.to} label={c.label} color={c.color} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Bottom marquee */}
-      <Marquee items={["Next.js", "TypeScript", "Flutter", "Firebase", "PostgreSQL", "Docker", "Figma", "Framer Motion", "Node.js", "Tailwind"]} bg="#0f0f0d" color="#555" />
+      <Marquee items={[ "TypeScript", "Flutter", "Firebase",   "Figma", "Tailwind"]} bg="#0f0f0d" color="#555" />
+
+      {/* Skew divider dark→dark (projects is also dark) */}
+      <SkewDivider fromColor="#080806" toColor="var(--black)" direction="up" />
     </section>
   )
 }
@@ -690,8 +976,9 @@ function ProjectsSection() {
               <SectionLabel number="02" label="Projects & Work" color="#f43f5e" />
               <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
                 <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(2.4rem,6vw,5rem)", fontWeight: 900, letterSpacing: "-0.03em", fontStyle: "italic", color: "#fff", lineHeight: 0.95 }}>
-                  Projects &<br />
-                  <span style={{ color: "var(--rose)" }}>Work Experience</span>
+                  <StaggerText text="Projects &" charStyle={{ color: "#fff" }} />
+                  <br />
+                  <StaggerText text="Work Experience" charStyle={{ color: "var(--rose)" }} />
                 </h2>
                 <Mono style={{ color: "#333" }}>Click to explore →</Mono>
               </div>
@@ -823,16 +1110,17 @@ function SkillsSection() {
   const [activeTab, setActiveTab] = useState<"hard" | "soft">("hard")
 
   return (
-    <section id="skills" className="section-pad" style={{ padding: "100px 48px 120px", background: "var(--bg)" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+    <section id="skills" className="section-pad" style={{ padding: "0 0 120px", background: "var(--bg)" }}>
+      <SkewDivider fromColor="var(--black)" toColor="var(--bg)" direction="up" />
+      <div className="section-pad" style={{ padding: "60px 48px 0", maxWidth: 1200, margin: "0 auto" }}>
 
         {/* Header */}
         <Reveal>
           <SectionLabel number="03" label="Skills & Expertise" color="var(--violet)" />
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 52, flexWrap: "wrap", gap: 12 }}>
             <h2 style={{ fontFamily: "var(--ff-display)", fontSize: "clamp(2.4rem,6vw,5rem)", fontWeight: 900, letterSpacing: "-0.03em", fontStyle: "italic", lineHeight: 0.95 }}>
-              Skills &<br />
-              <span style={{ color: "var(--violet)" }}>Expertise</span>
+              <StaggerText text="Skills &" /><br />
+              <StaggerText text="Expertise" charStyle={{ color: "var(--violet)" }} />
             </h2>
             {/* Legend */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "flex-end" }}>
@@ -900,8 +1188,6 @@ function SkillsSection() {
               ))}
             </div>
 
-            {/* Currently learning card */}
-          
           </div>
         </div>
       </div>
@@ -912,7 +1198,9 @@ function SkillsSection() {
 /* ─── CONTACT SECTION ── */
 function ContactSection() {
   return (
-    <section id="contact" className="section-pad" style={{ padding: "100px 48px 72px", background: "var(--black)", color: "var(--white)", position: "relative", overflow: "hidden" }}>
+    <>
+      <SkewDivider fromColor="var(--bg)" toColor="var(--black)" direction="down" />
+      <section id="contact" className="section-pad" style={{ padding: "100px 48px 72px", background: "var(--black)", color: "var(--white)", position: "relative", overflow: "hidden" }}>
 
       {/* Giant ghost text */}
       <div style={{ position: "absolute", bottom: -20, left: -20, fontFamily: "var(--ff-impact)", fontSize: "clamp(80px,20vw,240px)", color: "var(--white)", opacity: 0.02, letterSpacing: "-0.04em", userSelect: "none", pointerEvents: "none", lineHeight: 1 }}>HELLO</div>
@@ -946,13 +1234,15 @@ function ContactSection() {
             <div>
               <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Social</Mono>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {[["GitHub", "var(--sky)"], ["LinkedIn", "var(--violet)"]].map(([s, c]) => (
-                  <a key={s} href="#"
+                {[["Facebook", "var(--sky)"],].map(([s, c]) => (
+                  <a key={s} href="https://www.facebook.com/Nknooky12"
                     style={{ fontFamily: "var(--ff-impact)", fontSize: 18, letterSpacing: "0.1em", color: "#fff", borderBottom: "2px solid #2a2a2a", paddingBottom: 3, width: "fit-content", transition: "all .2s" }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = c; e.currentTarget.style.color = c }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = "#2a2a2a"; e.currentTarget.style.color = "#fff" }}
                   >{s} ↗</a>
+                  
                 ))}
+                
               </div>
             </div>
             <div>
@@ -970,27 +1260,41 @@ function ContactSection() {
         <div style={{ height: 1, background: "#1a1a1a", margin: "72px 0 28px" }} />
         <div className="footer-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
           <span style={{ fontFamily: "var(--ff-impact)", fontSize: 14, letterSpacing: "0.1em", color: "#2a2a2a" }}>© THANAKORN THONGSA 2025</span>
-          <Mono style={{ color: "#2a2a2a" }}>Portfolio</Mono>
+          <Mono style={{ color: "#2a2a2a" }}>Portfolio — Issue 2025</Mono>
           <Mono style={{ color: "#2a2a2a" }}>Built with Next.js & Framer Motion</Mono>
         </div>
       </div>
     </section>
+    </>
   )
 }
 
 /* ─── ROOT ── */
 export default function Portfolio() {
+  const [loaded, setLoaded] = useState(false)
+
   return (
     <>
       <FontLoader />
-      <div style={{ background: "var(--bg)", color: "var(--black)" }}>
+      <AnimatePresence>
+        {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
+      </AnimatePresence>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: loaded ? 1 : 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        style={{ background: "var(--bg)", color: "var(--black)" }}
+      >
+        <CustomCursor />
+        <SideNavDots />
         <Nav />
         <HeroSection />
         <ActivitiesSection />
         <ProjectsSection />
         <SkillsSection />
         <ContactSection />
-      </div>
+      </motion.div>
     </>
   )
 }
