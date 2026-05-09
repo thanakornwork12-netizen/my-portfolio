@@ -63,7 +63,6 @@ function FontLoader() {
         .proj-card-inner { grid-template-columns: 1fr !important; }
         .hero-num { font-size: clamp(100px, 30vw, 200px) !important; }
 
-        /* Mobile project card specific */
         .proj-img-block { width: 100% !important; height: 220px !important; }
         .proj-img-block img { height: 220px !important; object-fit: cover !important; }
         .proj-tap-hint { display: flex !important; }
@@ -101,7 +100,6 @@ function FontLoader() {
       .letter-wrap { overflow: hidden; display: inline-block; }
       .letter-char { display: inline-block; animation: letterIn 0.7s cubic-bezier(0.22,1,0.36,1) both; }
 
-      /* Tap ripple */
       @keyframes tapRipple {
         0%   { transform: translate(-50%,-50%) scale(0); opacity: 0.4; }
         100% { transform: translate(-50%,-50%) scale(4); opacity: 0; }
@@ -114,13 +112,11 @@ function FontLoader() {
         animation: tapRipple 0.6s ease-out forwards;
       }
 
-      /* Pulse animation for tap cue */
       @keyframes tapPulse {
         0%,100% { transform: scale(1); opacity: 0.8; }
         50%      { transform: scale(1.12); opacity: 1; }
       }
 
-      /* Swipe up hint arrow */
       @keyframes arrowBounce {
         0%,100% { transform: translateY(0); }
         50%      { transform: translateY(-4px); }
@@ -168,48 +164,57 @@ const PROJECTS = [
     no: "03", title: "UBU Green – สะสมแต้ม ในโครงการของมหาลัย", client: "Ubon Ratchathani University", year: "2026",
     tags: ["Web App", "Sustainability", "Dashboard", "Gamification"], accent: "var(--lime)",
     imageBg: "linear-gradient(135deg,#a3e63528,#a3e63506)",
-    images: ["images/ubugreen.png"],
+    images: ["images/ubugreen.png","images/Picture2.png","images/Picture1.png","images/Picture3.png"],
     shortDesc: "แพลตฟอร์มส่งเสริมพฤติกรรมรักษ์โลก พร้อมระบบสะสมแต้มและ dashboard วิเคราะห์ข้อมูล",
     fullDesc: `UBU Green เป็นแพลตฟอร์มสนับสนุนแนวคิด Green University\n\n• **Activity Tracking** — บันทึกกิจกรรมรักษ์โลก\n\n• **Point & Reward System** — ระบบสะสมคะแนน Gamification\n\n• **Dashboard & Analytics** — แสดงสถิติการมีส่วนร่วม\n\n• **User-Centered Design** — รองรับมือถือและเดสก์ท็อป`,
     outcome: "เพิ่มการมีส่วนร่วมในกิจกรรมสิ่งแวดล้อม", duration: "2 เดือน", link: "#",
   },
 ]
 
+// ─── BA-FOCUSED SKILLS ───────────────────────────────────────────────────────
+
 const HARD_SKILLS = [
-  { label: "Flutter & Dart",       tier: "strong",   accent: "var(--sky)",     proof: "DadBuddy App" },
-  { label: "Firebase",             tier: "strong",   accent: "var(--amber)",   proof: "DadBuddy — Cloud Logging" },
-  { label: "Hive (Local Storage)", tier: "strong",   accent: "var(--orange)",  proof: "DadBuddy — Offline Data" },
-  { label: "React / Next.js",      tier: "strong",   accent: "var(--rose)",    proof: "Photography Portfolio" },
-  { label: "Python",               tier: "strong",   accent: "var(--emerald)", proof: "Programming Competition" },
-  { label: "UI/UX Design (Figma)", tier: "strong",   accent: "var(--violet)",  proof: "DadBuddy · UBU Green" },
-  { label: "TypeScript",           tier: "good",     accent: "var(--sky)",     proof: "Portfolio Projects" },
-  { label: "Node.js / Express",    tier: "good",     accent: "var(--emerald)", proof: "UBU Green Backend" },
-  { label: "Tailwind CSS",         tier: "good",     accent: "var(--pink)",    proof: "UBU Green · Web Projects" },
+  { label: "Requirements Gathering",    tier: "strong",   accent: "var(--amber)",   proof: "DadBuddy — สัมภาษณ์ผู้ใช้จริง" },
+  { label: "User Story & Use Case",     tier: "strong",   accent: "var(--sky)",     proof: "DadBuddy · UBU Green" },
+  { label: "Process Modeling (BPMN)",   tier: "strong",   accent: "var(--violet)",  proof: "UBU Green — วิเคราะห์ workflow" },
+  { label: "Wireframe & Prototyping",   tier: "strong",   accent: "var(--rose)",    proof: "Figma — DadBuddy · UBU Green" },
+  { label: "Data Analysis & Reporting", tier: "strong",   accent: "var(--emerald)", proof: "UBU Green Dashboard" },
+  { label: "Stakeholder Communication", tier: "strong",   accent: "var(--orange)",  proof: "ประสานงานกับ Nursing College" },
+  { label: "SQL & Database Design",     tier: "good",     accent: "var(--cyan)",    proof: "UBU Green — PostgreSQL" },
+  { label: "System Documentation",      tier: "good",     accent: "var(--pink)",    proof: "API Docs · BRD · SRS" },
+  { label: "UAT & Test Case Design",    tier: "good",     accent: "var(--amber)",   proof: "DadBuddy — ทดสอบกับผู้ใช้จริง" },
 ]
 
 const SOFT_SKILLS = [
-  { label: "Public Speaking & MC",    tier: "strong",   accent: "var(--amber)",   proof: "IT Night 2568 — MC บนเวที" },
-  { label: "Leadership & Organizing", tier: "strong",   accent: "var(--rose)",    proof: "สตาฟรับน้อง · Open House" },
-  { label: "Teamwork & Collaboration",tier: "strong",   accent: "var(--sky)",     proof: "Basketball · Futsal · Media Team" },
-  { label: "Media & Video Production",tier: "strong",   accent: "var(--violet)",  proof: "ถ่ายทำโปรโมท · Content Creator" },
-  { label: "Work Under Pressure",     tier: "good",     accent: "var(--emerald)", proof: "Pizza Company — Peak Hours" },
-  { label: "Event Management",        tier: "good",     accent: "var(--pink)",    proof: "Open House · IT Night" },
-  { label: "Attention to Detail",     tier: "good",     accent: "var(--cyan)",    proof: "QC at Pizza · App Testing" },
-  { label: "Self-Directed Learning",  tier: "good",     accent: "var(--orange)",  proof: "Flutter เรียนเอง → Shipped App" },
+  { label: "Public Speaking & MC",         tier: "strong",   accent: "var(--amber)",   proof: "IT Night 2568 — MC บนเวที" },
+  { label: "Leadership & Organizing",      tier: "strong",   accent: "var(--rose)",    proof: "สตาฟรับน้อง · Open House" },
+  { label: "Teamwork & Collaboration",     tier: "strong",   accent: "var(--sky)",     proof: "Basketball · Futsal · Media Team" },
+  { label: "Critical Thinking",            tier: "strong",   accent: "var(--violet)",  proof: "วิเคราะห์ปัญหาจาก Stakeholder" },
+  { label: "Problem Decomposition",        tier: "strong",   accent: "var(--emerald)", proof: "แยก Features ให้ทีมพัฒนา" },
+  { label: "Active Listening",             tier: "good",     accent: "var(--cyan)",    proof: "สัมภาษณ์ผู้ใช้งาน Nursing College" },
+  { label: "Work Under Pressure",          tier: "good",     accent: "var(--orange)",  proof: "Pizza Company — Peak Hours" },
+  { label: "Self-Directed Learning",       tier: "good",     accent: "var(--pink)",    proof: "ศึกษา BA Tools เพิ่มเติมด้วยตนเอง" },
 ]
 
 const TOOL_GROUPS = [
   {
-    project: "DadBuddy App",
-    accent: "var(--emerald)",
-    tools: ["Flutter", "Dart", "Firebase", "Hive", "Figma", "VS Code"],
+    project: "BA Analysis & Design",
+    accent: "var(--amber)",
+    tools: ["Figma", "Miro", "Draw.io", "Notion", "Confluence", "Lucidchart"],
   },
   {
-    project: "UBU Green Platform",
-    accent: "var(--lime)",
-    tools: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Prisma"],
+    project: "Data & Documentation",
+    accent: "var(--sky)",
+    tools: ["SQL", "Google Sheets", "Excel", "PowerPoint", "Markdown", "GitHub"],
+  },
+  {
+    project: "Development Awareness",
+    accent: "var(--emerald)",
+    tools: ["Flutter", "Next.js", "Firebase", "REST API", "Postman", "VS Code"],
   },
 ]
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null)
@@ -289,7 +294,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
             </div>
           </div>
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
-            {["Flutter", "React", "Figma", "Python", "Firebase"].map((t, i) => (
+            {["Requirements", "BPMN", "Figma", "SQL", "Agile"].map((t, i) => (
               <motion.span key={t}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: progress > (i + 1) * 18 ? 0.4 : 0, y: progress > (i + 1) * 18 ? 0 : 10 }}
@@ -698,7 +703,7 @@ function HeroSection() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}
           style={{ display: "flex", gap: 6, marginBottom: 32, flexWrap: "wrap" }}
         >
-          {[{ label: "Next.js", color: "var(--amber)" },{ label: "TypeScript", color: "var(--sky)" },{ label: "Node.js", color: "var(--emerald)" },{ label: "PostgreSQL", color: "var(--violet)" },{ label: "Figma", color: "var(--rose)" }].map(({ label, color }) => (
+          {[{ label: "Requirements", color: "var(--amber)" },{ label: "BPMN", color: "var(--sky)" },{ label: "Figma", color: "var(--violet)" },{ label: "SQL", color: "var(--emerald)" },{ label: "Agile / Scrum", color: "var(--rose)" }].map(({ label, color }) => (
             <motion.span key={label} whileHover={{ y: -3, scale: 1.05 }}
               style={{ fontFamily: "var(--ff-mono)", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", border: `1.5px solid ${color}`, color, padding: "5px 12px", background: `${color}0d`, cursor: "default" }}
             >{label}</motion.span>
@@ -834,7 +839,7 @@ function ActivitiesSection() {
             })}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 2, marginTop: 4 }}>
-            {[{ to: 13, label: "Activities", color: "var(--amber)" },{ to: 4, label: "Projects", color: "var(--rose)" },{ to: 2, label: "Years Study", color: "var(--sky)" },{ to: 8, label: "Hard Skills", color: "var(--emerald)" }].map(c => (
+            {[{ to: 13, label: "Activities", color: "var(--amber)" },{ to: 4, label: "Projects", color: "var(--rose)" },{ to: 2, label: "Years Study", color: "var(--sky)" },{ to: 9, label: "BA Skills", color: "var(--emerald)" }].map(c => (
               <div key={c.label} style={{ background: "#0d0d0b", padding: "28px 16px", borderTop: `3px solid ${c.color}` }}>
                 <Counter to={c.to} label={c.label} color={c.color} />
               </div>
@@ -842,17 +847,16 @@ function ActivitiesSection() {
           </div>
         </div>
       </div>
-      <Marquee items={["TypeScript", "Flutter", "Firebase", "Figma", "Tailwind"]} bg="#0f0f0d" color="#555" />
+      <Marquee items={["Requirements", "BPMN", "Figma", "SQL", "Stakeholder", "Agile", "UAT"]} bg="#0f0f0d" color="#555" />
       <SkewDivider fromColor="#080806" toColor="var(--black)" direction="up" />
     </section>
   )
 }
 
-/* ─── MOBILE TAP HINT BADGE ── */
 function TapHintBadge({ accent }: { accent: string }) {
   return (
     <div className="proj-tap-hint" style={{
-      display: "none", /* overridden by mobile CSS */
+      display: "none",
       position: "absolute", top: 14, right: 14,
       alignItems: "center", gap: 6,
       background: "rgba(0,0,0,0.75)",
@@ -863,7 +867,6 @@ function TapHintBadge({ accent }: { accent: string }) {
       zIndex: 5,
       animation: "tapPulse 2s ease-in-out infinite",
     }}>
-      {/* Finger tap icon */}
       <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M6 0.5C6.55 0.5 7 0.95 7 1.5V6.27C7.3 6.1 7.63 6 8 6C8.55 6 9.05 6.23 9.41 6.59L9.5 6.7V4.5C9.5 3.95 9.95 3.5 10.5 3.5C11.05 3.5 11.5 3.95 11.5 4.5V8.5C11.5 11.26 9.26 13.5 6.5 13.5H5.5C3.01 13.5 1 11.49 1 9V4.5C1 3.95 1.45 3.5 2 3.5C2.55 3.5 3 3.95 3 4.5V6.27C3.3 6.1 3.63 6 4 6C4.37 6 4.7 6.1 5 6.27V1.5C5 0.95 5.45 0.5 6 0.5Z" fill={accent}/>
       </svg>
@@ -872,11 +875,10 @@ function TapHintBadge({ accent }: { accent: string }) {
   )
 }
 
-/* ─── MOBILE TAP BAR (bottom of card) ── */
 function MobileTapBar({ accent }: { accent: string }) {
   return (
     <div className="proj-card-tap-bar" style={{
-      display: "none", /* overridden by mobile CSS */
+      display: "none",
       alignItems: "center",
       justifyContent: "center",
       gap: 10,
@@ -892,14 +894,12 @@ function MobileTapBar({ accent }: { accent: string }) {
   )
 }
 
-/* ─── PROJECTS SECTION ── */
 function ProjectsSection() {
   const [hov, setHov] = useState<number | null>(null)
   const [sel, setSel] = useState<Project | null>(null)
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number; color: string }[]>([])
 
   const handleCardClick = (project: Project, e: React.MouseEvent<HTMLDivElement>) => {
-    // Ripple effect
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
@@ -913,8 +913,6 @@ function ProjectsSection() {
     <>
       <ProjectModal project={sel} onClose={() => setSel(null)} />
       <section id="projects" style={{ background: "var(--bg)", paddingBottom: 0 }}>
-
-        {/* Header band */}
         <div style={{ background: "var(--black)", padding: "80px clamp(20px,4vw,48px) 60px" }}>
           <div style={{ maxWidth: 1240, margin: "0 auto" }}>
             <Reveal>
@@ -925,14 +923,11 @@ function ProjectsSection() {
                   <br />
                   <StaggerText text="Work Experience" charStyle={{ color: "var(--rose)" }} />
                 </h2>
-                {/* Desktop hint */}
                 <div className="proj-desktop-hint" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
                   <Mono style={{ color: "#555" }}>Click to explore →</Mono>
                 </div>
               </div>
             </Reveal>
-
-            {/* Mobile hint banner — shown only on mobile */}
             <div className="proj-tap-hint" style={{
               display: "none",
               marginTop: 20,
@@ -952,15 +947,12 @@ function ProjectsSection() {
                 แตะที่การ์ดเพื่อดูรายละเอียด
               </span>
             </div>
-
             <motion.div style={{ height: 4, marginTop: 40, background: `linear-gradient(90deg,var(--amber) 0%,var(--rose) 33%,var(--sky) 66%,var(--emerald) 100%)` }}
               initial={{ scaleX: 0, originX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             />
           </div>
         </div>
-
-        {/* Cards */}
         <div style={{ background: "var(--black)", padding: "4px clamp(20px,4vw,48px) 80px" }}>
           <div style={{ maxWidth: 1240, margin: "0 auto", display: "flex", flexDirection: "column", gap: 3 }}>
             {PROJECTS.map((p, i) => (
@@ -977,16 +969,12 @@ function ProjectsSection() {
                     transition: "border-color .2s",
                   }}
                 >
-                  {/* Ripple container */}
                   {ripples.map(r => (
                     <span key={r.id} className="tap-ripple"
                       style={{ left: r.x, top: r.y, background: r.color }}
                     />
                   ))}
-
-                  {/* Mobile: stack image on top, text below */}
                   <div className="proj-card-inner" style={{ display: "grid", gridTemplateColumns: "auto 1fr" }}>
-                    {/* Image block */}
                     <div className="proj-img-block" style={{ position: "relative", background: "#080806", overflow: "hidden", width: "clamp(180px, 32vw, 400px)", flexShrink: 0 }}>
                       {p.images.length > 0 ? (
                         <motion.img src={p.images[0]} alt={p.title}
@@ -1001,27 +989,19 @@ function ProjectsSection() {
                           </div>
                         </div>
                       )}
-
-                      {/* Mobile tap hint badge (top-right of image) */}
                       <TapHintBadge accent={p.accent} />
-
-                      {/* Image count badge */}
                       {p.images.length > 1 && (
                         <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(0,0,0,0.8)", border: `1px solid ${p.accent}55`, padding: "3px 10px", display: "flex", alignItems: "center", gap: 5, backdropFilter: "blur(6px)" }}>
                           <span style={{ color: p.accent, fontSize: 10 }}>⊞</span>
                           <Mono style={{ color: p.accent, fontSize: 9 }}>{p.images.length}</Mono>
                         </div>
                       )}
-
-                      {/* Desktop hover overlay */}
                       <motion.div animate={{ opacity: hov === i ? 1 : 0 }}
                         className="proj-desktop-hint"
                         style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.55)", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
                         <span style={{ fontFamily: "var(--ff-impact)", fontSize: 13, letterSpacing: "0.2em", color: "#fff", border: `2px solid ${p.accent}`, padding: "10px 20px", background: `${p.accent}15` }}>OPEN PROJECT</span>
                       </motion.div>
                     </div>
-
-                    {/* Text */}
                     <div style={{ padding: "clamp(20px,3vw,32px)", display: "flex", flexDirection: "column", justifyContent: "center", borderLeft: "1px solid #1a1a1a" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
                         <span style={{ fontFamily: "var(--ff-impact)", fontSize: 36, color: p.accent, lineHeight: 1, opacity: 0.6 }}>{p.no}</span>
@@ -1041,15 +1021,11 @@ function ProjectsSection() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Mobile bottom tap bar */}
                   <MobileTapBar accent={p.accent} />
-
-                  {/* Mobile: subtle corner arrow indicator */}
                   <div className="proj-tap-hint" style={{
                     display: "none",
                     position: "absolute",
-                    bottom: 52, /* above the tap bar */
+                    bottom: 52,
                     right: 14,
                     alignItems: "center",
                     gap: 4,
@@ -1057,13 +1033,7 @@ function ProjectsSection() {
                     <motion.div
                       animate={{ y: [0, -3, 0] }}
                       transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}
-                      style={{
-                        fontFamily: "var(--ff-impact)",
-                        fontSize: 18,
-                        color: p.accent,
-                        opacity: 0.7,
-                        lineHeight: 1,
-                      }}
+                      style={{ fontFamily: "var(--ff-impact)", fontSize: 18, color: p.accent, opacity: 0.7, lineHeight: 1 }}
                     >↗</motion.div>
                   </div>
                 </motion.div>
@@ -1137,7 +1107,7 @@ function SkillsSection() {
         </Reveal>
         <Reveal>
           <div style={{ display: "flex", gap: 3, marginBottom: 8 }}>
-            {[{ key: "hard", label: "Hard Skills" },{ key: "soft", label: "Soft Skills" }].map(tab => (
+            {[{ key: "hard", label: "BA Hard Skills" },{ key: "soft", label: "Soft Skills" }].map(tab => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key as "hard" | "soft")}
                 style={{ fontFamily: "var(--ff-impact)", fontSize: 15, letterSpacing: "0.12em", padding: "10px 24px", cursor: "pointer", border: "2px solid var(--black)", transition: "all .2s", background: activeTab === tab.key ? "var(--black)" : "transparent", color: activeTab === tab.key ? "var(--amber)" : "var(--black)" }}
               >{tab.label}</button>
@@ -1158,7 +1128,7 @@ function SkillsSection() {
             </AnimatePresence>
           </div>
           <div>
-            <Reveal delay={1}><Mono style={{ display: "block", marginBottom: 20 }}>Tools & Workflow — by Project</Mono></Reveal>
+            <Reveal delay={1}><Mono style={{ display: "block", marginBottom: 20 }}>Tools & Workflow — by Category</Mono></Reveal>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               {TOOL_GROUPS.map((group, gi) => (
                 <Reveal key={gi} delay={gi + 1}>
