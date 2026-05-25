@@ -143,31 +143,282 @@ const ACTIVITIES = [
 
 const PROJECTS = [
   {
-    no: "01", title: "DadBuddy Mobile Application ทำให้กับ วิทยาลัยพยาบาลบรมราชชนนี ยะลา", client: "Boromarajonani College of Nursing, Yala", year: "2024",
-    tags: ["Flutter", "Firebase", "Hive", "Mobile App"], accent: "var(--emerald)",
+    no: "01",
+    title: "DadBuddy Mobile Application ทำให้กับ วิทยาลัยพยาบาลบรมราชชนนี ยะลา",
+    client: "Boromarajonani College of Nursing, Yala",
+    year: "2024",
+
+    tags: ["Flutter", "Firebase", "Hive", "Mobile App"],
+
+    accent: "var(--emerald)",
+
     imageBg: "linear-gradient(135deg,#10b98128,#10b98106)",
-    images: ["images/dadbuddy1.png","images/dadbuddylogin.png","images/dadbuddy2.png","images/dadbuddy3.png","images/dadbuddy4.png","images/dadbuddy5.png","images/dadbuddy6.png","images/dadbuddy7.png"],
-    shortDesc: "แอปสำหรับคุณพ่อมือใหม่ เรียนรู้การดูแลทารก พร้อมระบบเก็บข้อมูลออนไลน์และออฟไลน์",
-    fullDesc: `DadBuddy เป็นแอปพลิเคชันสำหรับคุณพ่อมือใหม่\nที่พัฒนาขึ้นเพื่อส่งเสริมความรู้ด้านการดูแลทารก\nและเสริมสร้างความมั่นใจในการเลี้ยงดูบุตรอย่างถูกต้อง\n\n• **Learning Modules** — รวมบทเรียนเกี่ยวกับการอุ้มทารก การอาบน้ำ การให้นม\n\n• **Progress Tracking** — บันทึก Favorite ติดตามบทเรียนที่เรียนจบแล้ว\n\n• **Cloud Logging (Firebase)** — จัดเก็บ Log การใช้งานบน Cloud\n\n• **Offline Storage (Hive)** — จัดเก็บข้อมูลแบบออฟไลน์`,
-    outcome: "ช่วยเพิ่มความมั่นใจให้คุณพ่อมือใหม่", duration: "3 เดือน", link: "#",
+
+    images: [
+      "images/dadbuddy1.png",
+      "images/dadbuddylogin.png",
+      "images/dadbuddy2.png",
+      "images/dadbuddy3.png",
+      "images/dadbuddy4.png",
+      "images/dadbuddy5.png",
+      "images/dadbuddy6.png",
+      "images/dadbuddy7.png"
+    ],
+
+    shortDesc:
+      "แอปพลิเคชันสำหรับคุณพ่อมือใหม่ ที่ช่วยเรียนรู้การดูแลทารก พร้อมระบบบันทึกข้อมูลและใช้งานได้ทั้งออนไลน์และออฟไลน์",
+
+    fullDesc: `DadBuddy เป็น Mobile Application ที่พัฒนาขึ้นเพื่อช่วยสนับสนุนคุณพ่อมือใหม่ในการเรียนรู้การดูแลทารกอย่างถูกต้องและมั่นใจมากยิ่งขึ้น โดยออกแบบให้ใช้งานง่าย เข้าถึงได้สะดวก และเหมาะสำหรับผู้ใช้งานทั่วไป
+
+โปรเจกต์นี้พัฒนาด้วย Flutter เพื่อรองรับการทำงานแบบ Cross-Platform และออกแบบ UI/UX ให้เหมาะกับการใช้งานบนสมาร์ตโฟน โดยเน้นความเรียบง่าย สบายตา และลดความซับซ้อนในการใช้งาน
+
+• **Learning Modules** — รวมเนื้อหาเกี่ยวกับการอุ้มทารก การให้นม การอาบน้ำ การดูแลสุขภาพเบื้องต้น และการพัฒนาการเด็กในแต่ละช่วงวัย
+
+• **Favorite & Progress Tracking** — ผู้ใช้งานสามารถบันทึกบทเรียนที่สนใจและติดตามความคืบหน้าของการเรียนรู้ได้
+
+• **Cloud Logging with Firebase** — ใช้ Firebase สำหรับจัดเก็บข้อมูลการใช้งาน การติดตาม Activity และรองรับการจัดการข้อมูลแบบ Real-time
+
+• **Offline Storage using Hive** — รองรับการใช้งานแบบ Offline ผ่าน Hive Database เพื่อให้สามารถเข้าถึงข้อมูลได้แม้ไม่มีอินเทอร์เน็ต
+
+• **Responsive Mobile UI** — ออกแบบ Interface ให้เหมาะกับทั้ง iPhone และ Android พร้อมรองรับการใช้งานจริง
+
+• **Performance Optimization** — ปรับปรุงประสิทธิภาพการโหลดข้อมูลและการจัดการ State เพื่อให้แอปทำงานได้ลื่นไหล
+
+• **App Store Deployment** — ดำเนินการ Build, Testing และเผยแพร่แอปบน App Store พร้อมจัดการส่วนของ Metadata และการ Submit Review`,
+
+    outcome:
+      "ช่วยเพิ่มความมั่นใจให้คุณพ่อมือใหม่ในการดูแลบุตร พร้อมสร้างประสบการณ์การเรียนรู้ที่เข้าถึงง่ายและใช้งานได้จริง",
+
+    duration: "3 เดือน",
+
+    responsibilities: [
+      "ออกแบบและพัฒนา Mobile Application ด้วย Flutter",
+      "ออกแบบ UI/UX และจัดวางโครงสร้างหน้าจอ",
+      "เชื่อมต่อ Firebase และระบบจัดเก็บข้อมูล",
+      "พัฒนา Offline Storage ด้วย Hive",
+      "ทดสอบและปรับปรุง Performance",
+      "Deploy แอปขึ้น App Store"
+    ],
+
+    technologies: [
+      "Flutter",
+      "Dart",
+      "Firebase",
+      "Hive",
+      "REST API",
+      "Git"
+    ],
+
+    link: "https://apps.apple.com/us/app/dadbuddy/id6772190541",
   },
+
   {
-    no: "02", title: "Part-Time Staff – The Pizza Company", client: "The Pizza Company", year: "2024",
-    tags: ["Order Management", "Delivery Coordination", "Customer Service"], accent: "var(--rose)",
+    no: "02",
+
+    title: "Part-Time Staff – The Pizza Company",
+
+    client: "The Pizza Company",
+
+    year: "2024",
+
+    tags: [
+      "Order Management",
+      "Delivery Coordination",
+      "Customer Service"
+    ],
+
+    accent: "var(--rose)",
+
     imageBg: "linear-gradient(135deg,#f43f5e28,#f43f5e06)",
-    images: ["images/pizza4.JPG","images/pizza1.JPG","images/pizza2.JPG","images/pizza3.JPG"],
-    shortDesc: "ดูแลจัดการออเดอร์และประสานงานการจัดส่งในช่วงเวลาเร่งด่วน",
-    fullDesc: `ปฏิบัติงานในตำแหน่งพนักงานพาร์ทไทม์ที่ The Pizza Company\n\n• **Order Management** — ตรวจสอบออเดอร์ทั้งหน้าร้านและเดลิเวอรี่\n\n• **Delivery Coordination** — ประสานงานกับไรเดอร์และทีมครัว\n\n• **Quality Control** — ตรวจสอบความถูกต้องของสินค้า\n\n• **Peak Hour Handling** — บริหารจัดการออเดอร์จำนวนมากในช่วงเวลาเร่งด่วน`,
-    outcome: "จัดการออเดอร์ได้แม่นยำและตรงเวลา", duration: "2 เดือน", link: "#",
+
+    images: [
+      "images/pizza4.JPG",
+      "images/pizza1.JPG",
+      "images/pizza2.JPG",
+      "images/pizza3.JPG"
+    ],
+
+    shortDesc:
+      "ดูแลจัดการออเดอร์ ประสานงานกับทีมครัวและไรเดอร์ พร้อมให้บริการลูกค้าในช่วงเวลาเร่งด่วน",
+
+    fullDesc: `ปฏิบัติงานในตำแหน่งพนักงานพาร์ทไทม์ที่ The Pizza Company โดยรับผิดชอบงานด้านการจัดการออเดอร์ การประสานงานระหว่างทีม และการดูแลคุณภาพการให้บริการในช่วงเวลาที่มีลูกค้าจำนวนมาก
+
+การทำงานในสภาพแวดล้อมที่มีความกดดันสูงช่วยพัฒนาทักษะด้านการสื่อสาร การแก้ปัญหาเฉพาะหน้า และการบริหารเวลาได้อย่างมีประสิทธิภาพ
+
+• **Order Management** — ตรวจสอบและจัดการออเดอร์ทั้งหน้าร้าน เดลิเวอรี่ และออนไลน์ให้ถูกต้อง
+
+• **Delivery Coordination** — ประสานงานกับไรเดอร์และทีมครัวเพื่อให้การจัดส่งเป็นไปอย่างรวดเร็ว
+
+• **Customer Service** — ดูแลลูกค้า แนะนำสินค้า และแก้ไขปัญหาเฉพาะหน้า
+
+• **Quality Control** — ตรวจสอบความถูกต้องของสินค้าและมาตรฐานก่อนส่งมอบ
+
+• **Peak Hour Handling** — บริหารจัดการงานในช่วงเวลาเร่งด่วนที่มีออเดอร์จำนวนมาก
+
+• **Team Collaboration** — ทำงานร่วมกับทีมภายในร้านเพื่อให้ระบบการทำงานมีประสิทธิภาพ`,
+
+    outcome:
+      "พัฒนาทักษะการทำงานเป็นทีม การสื่อสาร และการจัดการงานภายใต้แรงกดดัน",
+
+    duration: "2 เดือน",
+
+    responsibilities: [
+      "จัดการออเดอร์ลูกค้า",
+      "ประสานงานกับทีมครัวและไรเดอร์",
+      "ตรวจสอบคุณภาพสินค้า",
+      "ให้บริการและแก้ไขปัญหาลูกค้า",
+      "บริหารงานช่วง Peak Time"
+    ],
+
+    technologies: [
+      "POS System",
+      "Order Management",
+      "Customer Service"
+    ],
+
+    link: "#",
   },
+
   {
-    no: "03", title: "UBU Green – สะสมแต้ม ในโครงการของมหาลัย", client: "Ubon Ratchathani University", year: "2026",
-    tags: ["Web App", "Sustainability", "Dashboard", "Gamification"], accent: "var(--lime)",
+    no: "03",
+
+    title: "UBU Green – สะสมแต้ม ในโครงการของมหาลัย",
+
+    client: "Ubon Ratchathani University",
+
+    year: "2026",
+
+    tags: [
+      "Web App",
+      "Sustainability",
+      "Dashboard",
+      "Gamification"
+    ],
+
+    accent: "var(--lime)",
+
     imageBg: "linear-gradient(135deg,#a3e63528,#a3e63506)",
-    images: ["images/ubugreen.png","images/Picture2.png","images/Picture1.png","images/Picture3.png"],
-    shortDesc: "แพลตฟอร์มส่งเสริมพฤติกรรมรักษ์โลก พร้อมระบบสะสมแต้มและ dashboard วิเคราะห์ข้อมูล",
-    fullDesc: `UBU Green เป็นแพลตฟอร์มสนับสนุนแนวคิด Green University\n\n• **Activity Tracking** — บันทึกกิจกรรมรักษ์โลก\n\n• **Point & Reward System** — ระบบสะสมคะแนน Gamification\n\n• **Dashboard & Analytics** — แสดงสถิติการมีส่วนร่วม\n\n• **User-Centered Design** — รองรับมือถือและเดสก์ท็อป`,
-    outcome: "เพิ่มการมีส่วนร่วมในกิจกรรมสิ่งแวดล้อม", duration: "2 เดือน", link: "#",
+
+    images: [
+      "images/ubugreen.png",
+      "images/Picture2.png",
+      "images/Picture1.png",
+      "images/Picture3.png",
+      "images/card.png",
+      "images/poster.png"
+    ],
+
+    shortDesc:
+      "แพลตฟอร์มสนับสนุนแนวคิด Green University พร้อมระบบสะสมแต้มและ Dashboard วิเคราะห์ข้อมูลกิจกรรม",
+
+    fullDesc: `UBU Green เป็นแพลตฟอร์มที่พัฒนาขึ้นเพื่อสนับสนุนโครงการด้านสิ่งแวดล้อมภายในมหาวิทยาลัย โดยมีเป้าหมายในการส่งเสริมให้นักศึกษาและบุคลากรมีส่วนร่วมในกิจกรรมรักษ์โลกผ่านระบบสะสมแต้มแบบ Gamification
+
+ระบบถูกออกแบบให้ใช้งานง่าย รองรับทั้ง Desktop และ Mobile พร้อม Dashboard สำหรับวิเคราะห์ข้อมูลการมีส่วนร่วมและติดตามผลลัพธ์ของโครงการ
+
+• **Activity Tracking System** — บันทึกกิจกรรมรักษ์โลก เช่น การเข้าร่วมกิจกรรม การลดใช้พลาสติก และกิจกรรมรีไซเคิล
+
+• **Point & Reward System** — ระบบสะสมแต้มและรางวัลเพื่อกระตุ้นการมีส่วนร่วมของผู้ใช้งาน
+
+• **Dashboard & Analytics** — แสดงข้อมูลสถิติ การเข้าร่วมกิจกรรม และข้อมูลเชิงวิเคราะห์ในรูปแบบ Dashboard
+
+• **Responsive Design** — รองรับการใช้งานทั้งมือถือ แท็บเล็ต และ Desktop
+
+• **User-Centered Design** — ออกแบบ UX/UI โดยเน้นให้ใช้งานง่ายและเข้าถึงผู้ใช้ทุกกลุ่ม
+
+• **Gamification Concept** — เพิ่มความสนุกและแรงจูงใจในการเข้าร่วมกิจกรรมผ่านระบบคะแนนและ Achievement`,
+
+    outcome:
+      "ช่วยเพิ่มการมีส่วนร่วมในกิจกรรมด้านสิ่งแวดล้อมและสนับสนุนแนวคิด Green University",
+
+    duration: "2 เดือน",
+
+    responsibilities: [
+      "ออกแบบและพัฒนา Web Application",
+      "ออกแบบระบบ Gamification",
+      "สร้าง Dashboard วิเคราะห์ข้อมูล",
+      "ออกแบบ Responsive UI",
+      "จัดการโครงสร้างข้อมูลกิจกรรม"
+    ],
+
+    technologies: [
+      "Web Development",
+      "Dashboard",
+      "Responsive Design",
+      "UI/UX Design"
+    ],
+
+    link: "#",
+  },
+
+  {
+    no: "04",
+
+    title:
+      "วารสารวิทยาศาสตร์สุขภาพ วิทยาลัยพยาบาลบรมราชชนนี สรรพสิทธิประสงค์",
+
+    client:
+      "วิทยาลัยพยาบาลบรมราชชนนี สรรพสิทธิประสงค์",
+
+    year: "2026",
+
+    tags: [
+      "Website Customization",
+      "CSS",
+      "Responsive Design",
+      "Academic Publishing"
+    ],
+
+    accent: "var(--lime)",
+
+    imageBg: "linear-gradient(135deg,#a3e63528,#a3e63506)",
+
+    images: [
+      "images/วารสาน4.jpeg",
+      "images/วารสาน1.png",
+      "images/วารสาน2.png",
+      "images/วารสาน1.png"
+    ],
+
+    shortDesc:
+      "ปรับแต่งเว็บไซต์วารสารวิชาการผ่าน CSS ภายใต้ข้อจำกัดของ Template เดิม เพื่อยกระดับภาพลักษณ์เว็บไซต์",
+
+    fullDesc: `ดำเนินการปรับปรุงเว็บไซต์วารสารวิทยาศาสตร์สุขภาพของวิทยาลัยพยาบาลบรมราชชนนี สรรพสิทธิประสงค์ โดยพัฒนาภายใต้ข้อจำกัดของระบบเดิมที่ไม่สามารถแก้ไข Backend หรือโครงสร้างหลักได้
+
+งานนี้มุ่งเน้นด้าน Frontend Styling และการออกแบบประสบการณ์ผู้ใช้งานผ่าน CSS เพื่อเพิ่มความทันสมัย ความเป็นระเบียบ และยกระดับภาพลักษณ์ของวารสารวิชาการให้เหมาะสมกับมาตรฐานการประเมินคุณภาพ
+
+• **UI Refinement** — ปรับปรุงหน้าตาเว็บไซต์ให้มีความเป็นมืออาชีพและเหมาะกับงานวิชาการ
+
+• **Typography & Layout Optimization** — ปรับรูปแบบตัวอักษร ระยะห่าง และ Layout ให้สามารถอ่านข้อมูลได้ง่าย
+
+• **Responsive Enhancement** — ปรับปรุงการแสดงผลทั้ง Desktop และ Mobile
+
+• **Constraint-based Development** — พัฒนาภายใต้ข้อจำกัดที่แก้ไขได้เฉพาะ CSS และ Frontend Styling
+
+• **Visual Consistency** — จัดระเบียบองค์ประกอบของเว็บไซต์ให้มีความสม่ำเสมอ
+
+• **Academic Publishing Support** — สนับสนุนการพัฒนาเว็บไซต์เพื่อยกระดับมาตรฐานวารสารสำหรับการประเมิน TCI`,
+
+    outcome:
+      "ช่วยยกระดับภาพลักษณ์และประสบการณ์การใช้งานของเว็บไซต์วารสาร พร้อมสนับสนุนการพัฒนาคุณภาพวารสาร",
+
+    duration: "1 อาทิตย์",
+
+    responsibilities: [
+      "ปรับแต่งเว็บไซต์ผ่าน CSS",
+      "ออกแบบ Layout และ Typography",
+      "พัฒนา Responsive Design",
+      "ปรับปรุงประสบการณ์ผู้ใช้งาน",
+      "แก้ปัญหาภายใต้ข้อจำกัดของระบบเดิม"
+    ],
+
+    technologies: [
+      "HTML",
+      "CSS",
+      "Responsive Design",
+      "Frontend Customization"
+    ],
+
+    link: "#",
   },
 ]
 
@@ -175,10 +426,10 @@ const PROJECTS = [
 
 const HARD_SKILLS = [
   { label: "Requirements Gathering",    tier: "strong",   accent: "var(--amber)",   proof: "DadBuddy — สัมภาษณ์ผู้ใช้จริง" },
-  { label: "User Story & Use Case",     tier: "strong",   accent: "var(--sky)",     proof: "DadBuddy · UBU Green" },
+  { label: "User Story & Use Case",     tier: "good",   accent: "var(--sky)",     proof: "DadBuddy · UBU Green" },
   { label: "Process Modeling (BPMN)",   tier: "strong",   accent: "var(--violet)",  proof: "UBU Green — วิเคราะห์ workflow" },
   { label: "Wireframe & Prototyping",   tier: "strong",   accent: "var(--rose)",    proof: "Figma — DadBuddy · UBU Green" },
-  { label: "Data Analysis & Reporting", tier: "strong",   accent: "var(--emerald)", proof: "UBU Green Dashboard" },
+  { label: "Data Analysis & Reporting", tier: "good",   accent: "var(--emerald)", proof: "UBU Green Dashboard" },
   { label: "Stakeholder Communication", tier: "strong",   accent: "var(--orange)",  proof: "ประสานงานกับ Nursing College" },
   { label: "SQL & Database Design",     tier: "good",     accent: "var(--cyan)",    proof: "UBU Green — PostgreSQL" },
   { label: "System Documentation",      tier: "good",     accent: "var(--pink)",    proof: "API Docs · BRD · SRS" },
@@ -200,17 +451,17 @@ const TOOL_GROUPS = [
   {
     project: "BA Analysis & Design",
     accent: "var(--amber)",
-    tools: ["Figma", "Miro", "Draw.io", "Notion", "Confluence", "Lucidchart"],
+    tools: ["Figma",, "Draw.io", "Notion", "Power Bi "],
   },
   {
     project: "Data & Documentation",
     accent: "var(--sky)",
-    tools: ["SQL", "Google Sheets", "Excel", "PowerPoint", "Markdown", "GitHub"],
+    tools: ["SQL", "Google Sheets", "Excel", "PowerPoint", "GitHub"],
   },
   {
     project: "Development Awareness",
     accent: "var(--emerald)",
-    tools: ["Flutter", "Next.js", "Firebase", "REST API", "Postman", "VS Code"],
+    tools: ["Flutter", "Next.js", "Firebase", "REST API", "VS Code"],
   },
 ]
 
@@ -713,10 +964,7 @@ function HeroSection() {
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}
             style={{ fontFamily: "var(--ff-mono)", fontSize: 12, color: "var(--mid)", lineHeight: 1.9, maxWidth: 360 }}
           >
-            Business Analyst ที่มีพื้นฐานด้านเทคโนโลยี  
-เข้าใจทั้งมุมธุรกิจและการพัฒนา  
-สามารถแปลงความต้องการให้เป็นระบบที่ใช้งานได้จริง  
-พร้อมเติบโตในทีม Product
+            เชื่อว่าการพัฒนาระบบที่ดีไม่ได้เริ่มจากการเขียนโค้ด แต่เริ่มจากการเข้าใจปัญหา วิเคราะห์ความต้องการอย่างรอบด้าน และออกแบบโซลูชันที่ใช้งานได้จริง
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }}
             style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
@@ -1176,11 +1424,11 @@ function ContactSection() {
             <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 40px" }}>
               <div>
                 <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Email</Mono>
-                <a href="mailto:thanakornwork12@gmail.com"
+                <a href="mailto:thanakorn.tho.work@gmail.com"
                   style={{ fontFamily: "var(--ff-mono)", fontSize: 12, color: "#fff", borderBottom: "2px solid #2a2a2a", paddingBottom: 3, wordBreak: "break-all", transition: "border-color .2s" }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = "var(--amber)"}
                   onMouseLeave={e => e.currentTarget.style.borderColor = "#2a2a2a"}
-                >thanakornwork12@gmail.com</a>
+                >thanakorn.tho.work@gmail.com</a>
               </div>
               <div>
                 <Mono style={{ display: "block", marginBottom: 12, color: "#555" }}>Social</Mono>
